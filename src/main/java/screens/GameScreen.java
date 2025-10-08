@@ -1,23 +1,40 @@
-package game.screens;
+package screens;
 
-import javafx.application.Application;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
-import javax.swing.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
-import static javafx.application.Application.launch;
+import level.LevelOne;
 
 public class GameScreen {
-    private Scene scene;
-    private Renderer renderer;
-    private Canvas canvas;
 
-    public static final int SCREEN_WIDTH = 800;
-    public static final int SCREEN_HEIGHT = 600;
+    public static Scene createScene(Stage stage) {
+        StackPane root = new StackPane();
+        root.getStyleClass().add("root"); // áp CSS
 
-    
+        Canvas canvas = new Canvas(500, 650);
+        root.getChildren().add(canvas);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        Scene scene = new Scene(root, 500, 650);
+        scene.getStylesheets().add(
+                MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
+        );
+
+        LevelOne levelOne = new LevelOne(canvas.getWidth(), canvas.getHeight());
+        levelOne.init();
+
+        // Animation loop để render LevelOne
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                //levelOne.update();  // hiện tại chưa logic
+                levelOne.render(gc);
+            }
+        }.start();
+
+        return scene;
+    }
 }

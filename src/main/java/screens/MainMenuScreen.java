@@ -46,10 +46,23 @@ public class MainMenuScreen extends Application {
         title.getStyleClass().add("title-label");
 
         Button btnStart = createMenuButton("🚀 BẮT ĐẦU CHƠI", "start-btn");
+        btnStart.setOnAction(e -> {
+            try {
+                // Tạo Scene của GameScreen
+                Scene gameScene = GameScreen.createScene(stage);
+                stage.setScene(gameScene); // chuyển ngay sang GameScreen
+                stage.setTitle("Arkanoid - Game");  // set title cho GameScreen
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+
         Button btnSettings = createMenuButton("⚙ CÀI ĐẶT", "settings-btn");
         Button btnRanking = createMenuButton("🏆 BẢNG XẾP HẠNG", "ranking-btn");
         Button btnGuide = createMenuButton("📖 HƯỚNG DẪN", "guide-btn");
         Button btnExit = createMenuButton("❌ THOÁT", "exit-btn");
+        btnExit.setOnAction(e -> System.exit(0));
+
 
         rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
 
@@ -99,4 +112,5 @@ public class MainMenuScreen extends Application {
         Paddle demoPaddle = new Paddle(120, 200, 60, 10);
         demoPaddle.render(gc);
     }
+
 }

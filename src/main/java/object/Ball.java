@@ -32,10 +32,4 @@ public class Ball extends MovableObject {
         }
     }
 
-    public boolean checkCollision(GameObject other) {
-        return x + radius > other.getX() &&
-                x - radius < other.getX() + other.getWidth() &&
-                y + radius > other.getY() &&
-                y - radius < other.getY() + other.getHeight();
-    }
 }
