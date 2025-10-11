@@ -67,6 +67,10 @@ public class LevelOne extends BaseLevel {
 
     @Override
     public void update() {
+
+        if (paddle.isGoLeft()) paddle.moveLeft();
+        if (paddle.isGoRight()) paddle.moveRight(500);
+
         ball.update();
 
         double speed = ball.getSpeed();

@@ -1,9 +1,11 @@
 package screens;
 
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import level.LevelOne;
@@ -27,10 +29,41 @@ public class GameScreen {
         levelOne.init();
 
         // --- Xử lý di chuyển paddle bằng bàn phím ---
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case LEFT -> levelOne.getPaddle().moveLeft();
-                case RIGHT -> levelOne.getPaddle().moveRight(canvas.getWidth());
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case LEFT:
+                        levelOne.getPaddle().setGoLeft(true);
+                        break;
+                    case RIGHT:
+                        levelOne.getPaddle().setGoRight(true);
+                        break;
+//                    case SPACE:
+//                        gamestarted = true;
+//                        break;
+//                    case ESCAPE:
+//                        gamestarted = false;
+//                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                switch (event.getCode()) {
+                    case LEFT:
+                        levelOne.getPaddle().setGoLeft(false);
+                        break;
+                    case RIGHT:
+                        levelOne.getPaddle().setGoRight(false);
+                        break;
+                    default:
+                        break;
+                }
             }
         });
 
