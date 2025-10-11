@@ -6,12 +6,13 @@ import javafx.scene.paint.Color;
 public class Brick extends GameObject {
 
     private int hitPoints;
-    private String type;
+    //private String type;
+    private Color color;
 
-    public Brick(double x, double y, double width, double height, int  hitPoints, String type) {
+    public Brick(double x, double y, double width, double height, int  hitPoints, Color color) {
         super(x, y, width, height);
         this.hitPoints = hitPoints;
-        this.type = type;
+        this.color = color;
     }
 
     @Override
@@ -21,6 +22,12 @@ public class Brick extends GameObject {
 
 
     public void render(GraphicsContext gc) {
+        if (!isDestroyed()) { // chỉ vẽ nếu chưa destroyed
+            gc.setFill(color);
+            gc.fillRect(x, y, width, height);
+            gc.setStroke(Color.BLACK);
+            gc.strokeRect(x, y, width, height);
+        }
     }
 
     public void takeHit() {
@@ -30,4 +37,5 @@ public class Brick extends GameObject {
     public boolean isDestroyed() {
         return hitPoints <= 0;
     }
+
 }

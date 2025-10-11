@@ -4,14 +4,25 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import object.Ball;
 import object.Paddle;
+import object.Brick;
+
+import java.util.List;
+import java.util.ArrayList;
 
 public class LevelOne extends BaseLevel {
     private Ball ball;
     private Paddle paddle;
+    private List<Brick> bricks;
+
     private boolean completed = false;
+
 
     public LevelOne(double width, double height) {
         super(width, height);
+    }
+
+    public Paddle getPaddle() {
+        return paddle;
     }
 
     @Override
@@ -20,7 +31,22 @@ public class LevelOne extends BaseLevel {
         paddle = new Paddle((width - 120) / 2, height - 50, 120, 30);
 
         // Ball nằm ngay trên paddle, radius 20
-        ball = new Ball((width - 120) / 2 + 120 / 2, height - 50 - 20, 20, 2, 2, 0);
+        ball = new Ball((width - 120) / 2 + 120 / 2, height - 50 - 20, 20, 5, 1, -1);
+
+        // Brick
+        bricks = new ArrayList<>();
+        double brickGap = 5;
+        double brickWidth = (width - 7 * brickGap) / 6;
+        double brickHeight = 30;
+        Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
+                Color.web("#ffe66d"), Color.web("#9d4edd")};
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 6; col++) {
+                double x = brickGap + col * (brickWidth + brickGap);
+                double y = 50 + row * (brickHeight + brickGap);
+                bricks.add(new Brick(x, y, brickWidth, brickHeight,1, colors[(row*6+col)%colors.length]));
+            }
+        }
     }
 
     @Override
@@ -29,21 +55,9 @@ public class LevelOne extends BaseLevel {
         gc.setFill(Color.web("#0b0b28"));
         gc.fillRect(0, 0, width, height);
 
-        // Brick demo
-        double brickGap = 5; // khoảng cách giữa các brick
-        double brickWidth = (width - 7 * brickGap) / 6;
-        double brickHeight = 40;
-        Color[] colors = {  Color.web("#ff6b6b"),
-                            Color.web("#4ecdc4"),
-                            Color.web("#ffe66d"),
-                            Color.web("#9d4edd") };
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 6; col++) {
-                double x = brickGap + col * (brickWidth + brickGap);
-                double y = 50 + row * (brickHeight + brickGap);
-                gc.setFill(colors[(row + col) % colors.length]); // xen kẽ
-                gc.fillRect(x, y, brickWidth, brickHeight);
-            }
+        // Bricks
+        for (Brick b : bricks) {
+            b.render(gc);
         }
 
         // Ball + Paddle
@@ -53,9 +67,61 @@ public class LevelOne extends BaseLevel {
 
     @Override
     public void update() {
-        //ball.update();
-        // TODO: thêm logic di chuyển paddle, va chạm, kiểm tra hết brick
-        // Khi hết brick, completed = true
+        ball.update();
+
+        double speed = ball.getSpeed();
+        if (ball.getX() - ball.getRadius() < 0) {
+            ball.setDx(Math.abs(ball.getDx()));
+            ball.setX(ball.getRadius());
+        }
+        if (ball.getX() + ball.getRadius() > width) {
+            ball.setDx(-Math.abs(ball.getDx()));
+            ball.setX(width - ball.getRadius());
+        }
+
+        // Trần
+        if (ball.getY() - ball.getRadius() < 0) {
+            ball.setDy(Math.abs(ball.getDy()));
+            ball.setY(ball.getRadius());
+        }
+
+        // Đáy
+        if (ball.getY() + ball.getRadius() > height) {
+            // reset lên paddle
+            ball.setX(paddle.getX() + paddle.getWidth()/2);
+            ball.setY(paddle.getY() - ball.getRadius() - 1);
+            ball.setDx(3); // vận tốc ban đầu
+            ball.setDy(-3); // đi lên
+        }
+
+
+        // --- Va chạm paddle ---
+        if (ball.getY() + ball.getRadius() >= paddle.getY() &&
+                ball.getX() >= paddle.getX() &&
+                ball.getX() <= paddle.getX() + paddle.getWidth()) {
+
+            // Tính vị trí chạm trên paddle (0..1)
+            double hitPos = (ball.getX() - paddle.getX()) / paddle.getWidth();
+            // Góc nảy từ -75° (trái) đến +75° (phải)
+            double angle = Math.toRadians(150 * hitPos - 75);
+            ball.setDx(speed * Math.cos(angle));
+            ball.setDy(-speed * Math.sin(angle)); // hướng lên
+        }
+
+        // Va chạm bóng & paddle
+        if (ball.checkCollision(paddle) && ball.getDy() > 0) {
+            ball.bounceOffPaddle(paddle);
+        }
+
+        // Va chạm bóng & bricks
+        for (Brick b : bricks) {
+            if (!b.isDestroyed() && ball.checkCollision(b)) {
+                ball.bounceOff(b);
+                b.takeHit();
+                break;
+            }
+        }
+
     }
 
     @Override

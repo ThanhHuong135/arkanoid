@@ -26,11 +26,19 @@ public class GameScreen {
         LevelOne levelOne = new LevelOne(canvas.getWidth(), canvas.getHeight());
         levelOne.init();
 
+        // --- Xử lý di chuyển paddle bằng bàn phím ---
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case LEFT -> levelOne.getPaddle().moveLeft();
+                case RIGHT -> levelOne.getPaddle().moveRight(canvas.getWidth());
+            }
+        });
+
         // Animation loop để render LevelOne
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                //levelOne.update();  // hiện tại chưa logic
+                levelOne.update();  // hiện tại chưa logic
                 levelOne.render(gc);
             }
         }.start();
