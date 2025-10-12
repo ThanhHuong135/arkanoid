@@ -9,6 +9,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import level.LevelOne;
+import object.Controller;
 
 public class GameScreen {
 
@@ -25,56 +26,8 @@ public class GameScreen {
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
         );
 
-        LevelOne levelOne = new LevelOne(canvas.getWidth(), canvas.getHeight());
-        levelOne.init();
-
-        // --- Xử lý di chuyển paddle bằng bàn phím ---
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case LEFT:
-                        levelOne.getPaddle().setGoLeft(true);
-                        break;
-                    case RIGHT:
-                        levelOne.getPaddle().setGoRight(true);
-                        break;
-//                    case SPACE:
-//                        gamestarted = true;
-//                        break;
-//                    case ESCAPE:
-//                        gamestarted = false;
-//                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                switch (event.getCode()) {
-                    case LEFT:
-                        levelOne.getPaddle().setGoLeft(false);
-                        break;
-                    case RIGHT:
-                        levelOne.getPaddle().setGoRight(false);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-
-        // Animation loop để render LevelOne
-        new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                levelOne.update();  // hiện tại chưa logic
-                levelOne.render(gc);
-            }
-        }.start();
+        Controller controller = new Controller();
+        controller.setGameLoop(scene, gc);
 
         return scene;
     }
