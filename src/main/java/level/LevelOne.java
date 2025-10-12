@@ -13,6 +13,7 @@ public class LevelOne extends BaseLevel {
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
+    boolean kiemtra = false;
 
     private boolean completed = false;
 
@@ -31,7 +32,7 @@ public class LevelOne extends BaseLevel {
         paddle = new Paddle((width - 120) / 2, height - 50, 120, 30);
 
         // Ball nằm ngay trên paddle, radius 20
-        ball = new Ball((width - 120) / 2 + 120 / 2, height - 50 - 20, 20, 5, 1, -1);
+        ball = new Ball((width - 120) / 2 + 120 / 2, height - 50 - 20, 20, 3, 1, -1);
 
         // Brick
         bricks = new ArrayList<>();
@@ -66,12 +67,16 @@ public class LevelOne extends BaseLevel {
     }
 
     @Override
+
     public void update() {
 
         if (paddle.isGoLeft()) paddle.moveLeft();
         if (paddle.isGoRight()) paddle.moveRight(500);
 
-        ball.update();
+        if(kiemtra==false && (paddle.isGoLeft() || paddle.isGoRight() ) ){ball.update();kiemtra=true;}
+        if(kiemtra) ball.update();
+
+
 
         double speed = ball.getSpeed();
         if (ball.getX() - ball.getRadius() < 0) {
@@ -89,42 +94,20 @@ public class LevelOne extends BaseLevel {
             ball.setY(ball.getRadius());
         }
 
-        // Đáy
-        if (ball.getY() + ball.getRadius() > height) {
-            // reset lên paddle
-            ball.setX(paddle.getX() + paddle.getWidth()/2);
-            ball.setY(paddle.getY() - ball.getRadius() - 1);
-            ball.setDx(3); // vận tốc ban đầu
-            ball.setDy(-3); // đi lên
-        }
-
-
-        // --- Va chạm paddle ---
-        if (ball.getY() + ball.getRadius() >= paddle.getY() &&
-                ball.getX() >= paddle.getX() &&
-                ball.getX() <= paddle.getX() + paddle.getWidth()) {
-
-            // Tính vị trí chạm trên paddle (0..1)
-            double hitPos = (ball.getX() - paddle.getX()) / paddle.getWidth();
-            // Góc nảy từ -75° (trái) đến +75° (phải)
-            double angle = Math.toRadians(150 * hitPos - 75);
-            ball.setDx(speed * Math.cos(angle));
-            ball.setDy(-speed * Math.sin(angle)); // hướng lên
-        }
 
         // Va chạm bóng & paddle
-        if (ball.checkCollision(paddle) && ball.getDy() > 0) {
+       if (ball.checkCollision(paddle) && ball.getDy() > 0) {
             ball.bounceOffPaddle(paddle);
         }
 
-        // Va chạm bóng & bricks
+      //  Va chạm bóng & bricks
         for (Brick b : bricks) {
-            if (!b.isDestroyed() && ball.checkCollision(b)) {
-                ball.bounceOff(b);
-                b.takeHit();
-                break;
-            }
-        }
+          if (!b.isDestroyed() && ball.checkCollision(b)) {
+               ball.bounceOff(b);
+               b.takeHit();
+               break;
+           }
+      }
 
     }
 

@@ -64,22 +64,38 @@ public class Ball extends MovableObject {
     }
 
     public void bounceOffPaddle(GameObject paddle) {
-        double speed = 6;
-        dy = -Math.abs(dy); // luôn đi lên
+        // Tốc độ bóng (có thể tăng dần nếu muốn)
+        double speed = 3.5;
 
-        // Vị trí chạm (0 trái, 1 phải)
+        // Tính vị trí chạm (0 = mép trái, 1 = mép phải)
         double hitPos = (x - paddle.getX()) / paddle.getWidth();
-        // Góc nảy tối đa ±75°
-        double angle = Math.toRadians(150 * hitPos - 75);
+        hitPos = Math.max(0, Math.min(1, hitPos));
 
+        // Góc nảy: -60° (trái) → +60° (phải)
+        double minAngle = -60;
+        double maxAngle = 60;
+
+        // Tạo góc nảy dựa trên vị trí chạm
+        double angle = Math.toRadians(minAngle + (maxAngle - minAngle) * hitPos);
+
+        // Đảm bảo góc không quá phẳng (tránh gần 0°)
+        double minVertical = Math.toRadians(30); // luôn có ít nhất 20° lên trên
+        if (Math.abs(angle) < minVertical) {
+            angle = (angle < 0 ? -minVertical : minVertical);
+        }
+
+        // Tính vận tốc mới
         dx = speed * Math.cos(angle);
-        dy = -speed * Math.sin(angle);
+        dy = -Math.abs(speed * Math.sin(angle)); // luôn đi lên
     }
 
+
+
     public boolean checkCollision(GameObject obj) {
-        return x + radius > obj.getX() &&
-                x - radius < obj.getX() + obj.getWidth() &&
-                y + radius > obj.getY() &&
-                y - radius < obj.getY() + obj.getHeight();
+        double closestX = Math.max(obj.getX(), Math.min(x, obj.getX() + obj.getWidth()));
+        double closestY = Math.max(obj.getY(), Math.min(y, obj.getY() + obj.getHeight()));
+        double dx = x - closestX;
+        double dy = y - closestY;
+        return (dx * dx + dy * dy) <= (radius * radius);
     }
 }
