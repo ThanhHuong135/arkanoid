@@ -1,15 +1,11 @@
 package screens;
 
-import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import level.LevelOne;
-import object.Controller;
+import manager.GameManager;
 
 public class GameScreen {
 
@@ -26,8 +22,8 @@ public class GameScreen {
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
         );
 
-        Controller controller = new Controller();
-        controller.setGameLoop(scene, gc);
+        GameManager gameManager = new GameManager();
+        gameManager.setGameLoop(scene, gc);
 
         return scene;
     }

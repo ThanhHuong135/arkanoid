@@ -1,4 +1,5 @@
 package object;
+
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -6,38 +7,35 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import level.LevelOne;
-import object.Ball;
-import object.Paddle;
+
 import java.util.ArrayList;
 import java.util.List;
-import object.Brick;
-import animation.BrickParticle;
 
 public class Controller {
 
     private Ball ball;
     private Paddle paddle;
     private List<Brick> bricks;
-    public double width = 700;
+    public double width = 500;
     public double height = 650;
     boolean kiemtra = false;
 
     public void init() {
         // Paddle nằm giữa màn hình, cách đáy 50px, rộng 120, cao 30
-        paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
+        paddle = new Paddle((width - 120) / 2, height - 50, 120, 30);
 
         // Ball nằm ngay trên paddle, radius 20
-        ball = new Ball((width - 120) / 2 + 120 / 2, height - 50 - 10, 10, 3, 1, -1);
+        ball = new Ball((width - 120) / 2 + 120 / 2, height - 50 - 20, 20, 3, 1, -1);
 
         // Brick
         bricks = new ArrayList<>();
         double brickGap = 5;
-        double brickWidth = (width - 9 * brickGap) / 8;
+        double brickWidth = (width - 7 * brickGap) / 6;
         double brickHeight = 30;
         Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
                 Color.web("#ffe66d"), Color.web("#9d4edd")};
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 6; col++) {
                 double x = brickGap + col * (brickWidth + brickGap);
                 double y = 50 + row * (brickHeight + brickGap);
                 bricks.add(new Brick(x, y, brickWidth, brickHeight,1, colors[(row*6+col)%colors.length]));
@@ -62,7 +60,7 @@ public class Controller {
 
     public void update() {
         if (paddle.isGoLeft()) paddle.moveLeft();
-        if (paddle.isGoRight()) paddle.moveRight(this.width);
+        if (paddle.isGoRight()) paddle.moveRight(500);
 
         if(kiemtra==false && (paddle.isGoLeft() || paddle.isGoRight() ) ){ball.update();kiemtra=true;}
         if(kiemtra) ball.update();
@@ -90,13 +88,10 @@ public class Controller {
 
         // Va chạm bóng & bricks
         for (Brick b : bricks) {
-            if (!b.isDestroyed()) {
-                b.update(); // ← Gọi update để xử lý hiệu ứng vỡ
-                if (!b.isDestroyed() && ball.checkCollision(b)) {
-                    ball.bounceOff(b);
-                    b.takeHit();
-                    break;
-                }
+            if (!b.isDestroyed() && ball.checkCollision(b)) {
+                ball.bounceOff(b);
+                b.takeHit();
+                break;
             }
         }
 

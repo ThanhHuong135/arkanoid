@@ -22,6 +22,10 @@ public class Ball extends MovableObject {
         return speed;
     }
 
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
     public void render(GraphicsContext gc) {
         gc.setFill(Color.AQUA);
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
@@ -105,7 +109,6 @@ public class Ball extends MovableObject {
 
         dx = speed * Math.cos(angle);
         dy = -Math.abs(speed * Math.sin(angle)); //*
-
     }
 
 
