@@ -8,7 +8,6 @@ import object.Ball;
 import object.Brick;
 import object.Paddle;
 import object.PowerUp;
-import manager.InputManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class GameManager {
 
     public void init() {
         paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
-        ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 3, 1, -1);
+        ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 3, 1, -1, true);
 
         powerUps = new ArrayList<>();
         bricks = new ArrayList<>();
@@ -152,6 +151,7 @@ public class GameManager {
         if (ball.getY() > height) {
             lives--;
             kiemtra = false;
+            ball.clearTrail();
             if (lives > 0) {
                 resetBall();;
             }
