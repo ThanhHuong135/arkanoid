@@ -79,7 +79,7 @@ public class GameManager {
         if (gameOver) return;
 
         if (paddle.isGoLeft()) paddle.moveLeft();
-        if (paddle.isGoRight()) paddle.moveRight(500);
+        if (paddle.isGoRight()) paddle.moveRight(width);
 
         if (kiemtra == false && (paddle.isGoLeft() || paddle.isGoRight())) {
             ball.update();
