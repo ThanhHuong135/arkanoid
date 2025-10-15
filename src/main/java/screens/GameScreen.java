@@ -17,11 +17,11 @@ public class GameScreen {
         StackPane root = new StackPane();
         root.getStyleClass().add("root"); // áp CSS
 
-        Canvas canvas = new Canvas(500, 650);
+        Canvas canvas = new Canvas(700, 650);
         root.getChildren().add(canvas);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        Scene scene = new Scene(root, 500, 650);
+        Scene scene = new Scene(root, 700, 650);
         scene.getStylesheets().add(
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
         );
