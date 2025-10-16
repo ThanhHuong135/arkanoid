@@ -59,10 +59,11 @@ public class Ball extends MovableObject {
 
     @Override
     public void update() {
-        if (trailEffect != null) {
+        if (trailEffect != null && (dx != 0 || dy != 0)) {
             trailEffect.addPosition(x, y);
-            trailEffect.update();   // cập nhật alpha điểm cũ
+            trailEffect.update();
         }
+
         move(); // di chuyển bóng
     }
 
@@ -70,6 +71,10 @@ public class Ball extends MovableObject {
         if (trailEffect != null) {
             trailEffect.clear();
         }
+    }
+
+    public BallTrailEffect getTrailEffect() {
+        return trailEffect;
     }
 
     public void bounceOff(GameObject other) {
