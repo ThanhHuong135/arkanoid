@@ -1,17 +1,33 @@
 package object;
 
+import animation.BallTrailEffect;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Ball extends MovableObject {
     private double speed;
     private double radius;
     private double directionX, directionY; // hướng
+    private BallTrailEffect trailEffect; // lưu vệt đuôi
 
     public Ball(double x, double y, double radius, double speed, double directionX, double directionY) {
         super(x, y, radius * 2, radius * 2, directionX * speed, directionY * speed);
         this.radius = radius;
         this.speed = speed;
+    }
+
+    public Ball(double x, double y, double radius, double speed, double directionX, double directionY, boolean enableTrail) {
+        super(x, y, radius * 2, radius * 2, directionX * speed, directionY * speed);
+        this.radius = radius;
+        this.speed = speed;
+
+        if (enableTrail) {
+            trailEffect = new BallTrailEffect(10, radius);
+        }
     }
 
     public double getRadius(){
@@ -22,7 +38,16 @@ public class Ball extends MovableObject {
         return speed;
     }
 
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
     public void render(GraphicsContext gc) {
+        // Vẽ vệt đuôi nếu có
+        if (trailEffect != null) {
+            trailEffect.render(gc);
+        }
+        // Vẽ bóng
         gc.setFill(Color.AQUA);
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
@@ -34,7 +59,17 @@ public class Ball extends MovableObject {
 
     @Override
     public void update() {
+        if (trailEffect != null) {
+            trailEffect.addPosition(x, y);
+            trailEffect.update();   // cập nhật alpha điểm cũ
+        }
         move(); // di chuyển bóng
+    }
+
+    public void clearTrail() {
+        if (trailEffect != null) {
+            trailEffect.clear();
+        }
     }
 
     public void bounceOff(GameObject other) {

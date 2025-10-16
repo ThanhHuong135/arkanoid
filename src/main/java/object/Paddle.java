@@ -48,6 +48,6 @@ public class Paddle extends MovableObject {
 
     public void render(GraphicsContext gc) {
         gc.setFill(Color.ORANGE);
-        gc.fillRect(x, y, width, height);
+        gc.fillRoundRect(x, y, width, height, 15, 15);  // bo góc 15px
     }
 }
