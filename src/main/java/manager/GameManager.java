@@ -78,6 +78,10 @@ public class GameManager {
         gc.fillText("Lives: " + lives, width - 100, 25);
     }
 
+    public void startGame() {
+        kiemtra = true;
+    }
+
     public void update() {
         if (gameOver) return;
 
@@ -206,7 +210,7 @@ public class GameManager {
 
     public void setGameLoop(Scene scene, GraphicsContext gc) {
             init();
-            InputManager.attach(scene, paddle, ball);
+            InputManager.attach(scene, paddle, ball, this);
 
             new AnimationTimer() {
                 @Override
