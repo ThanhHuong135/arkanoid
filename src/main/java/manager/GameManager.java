@@ -9,6 +9,7 @@ import object.Brick;
 import object.Paddle;
 import object.PowerUp;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -27,10 +28,13 @@ public class GameManager {
     private final double height = 650;
     boolean kiemtra = false;
     private boolean gameOver = false;
+    private double baseSpeed; // tốc độ gốc của bóng
+    private double basePaddleWidth; // chiều rộng gốc của paddle
 
     public void init() {
         paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
         ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 3, 1, -1, true);
+        baseSpeed = ball.getSpeed();
 
         powerUps = new ArrayList<>();
         bricks = new ArrayList<>();
@@ -77,56 +81,69 @@ public class GameManager {
     public void update() {
         if (gameOver) return;
 
+        if (InputManager.isGameStarted()) {
+            // bóng bay
+        } else {
+            // gắn bóng theo paddle
+            ball.setX(paddle.getX() + paddle.getWidth() / 2);
+            ball.setY(paddle.getY() - ball.getRadius());
+            ball.setDx(1);
+            ball.setDy(0);
+        }
+
         if (paddle.isGoLeft()) paddle.moveLeft();
         if (paddle.isGoRight()) paddle.moveRight(width);
 
-        if (kiemtra == false && (paddle.isGoLeft() || paddle.isGoRight())) {
-            ball.update();
+        if (!kiemtra && (paddle.isGoLeft() || paddle.isGoRight())) {
             kiemtra = true;
         }
-        if (kiemtra) ball.update();
 
-        double speed = ball.getSpeed();
-        if (ball.getX() - ball.getRadius() < 0) {
-            ball.setDx(Math.abs(ball.getDx()));
-            ball.setX(ball.getRadius());
-        }
-        if (ball.getX() + ball.getRadius() > width) {
-            ball.setDx(-Math.abs(ball.getDx()));
-            ball.setX(width - ball.getRadius());
-        }
-
-        // Trần
-        if (ball.getY() - ball.getRadius() < 0) {
-            ball.setDy(Math.abs(ball.getDy()));
-            ball.setY(ball.getRadius());
-        }
-
-        // Va chạm bóng & paddle
-        if (ball.checkCollision(paddle) && ball.getDy() > 0) {
-            ball.bounceOffPaddle(paddle);
-        }
-
-        // Va chạm bóng & bricks
-        for (Brick b : bricks) {
-            if (!b.isDestroyed() && ball.checkCollision(b)) {
-                ball.bounceOff(b);
-                b.takeHit();
-
-                score += 100;
-
-                if (b.isDestroyed()) {
-                    Random r = new Random();
-                    int chance = r.nextInt(100);
-                    if (chance < 30) {
-                        String[] types = {"FAST_BALL", "DEATH"};
-                        String type = types[r.nextInt(types.length)];
-                        powerUps.add(new PowerUp(b.getX() + b.getWidth() / 2, b.getY(), type));
-                    }
-                }
-                break;
+        if (kiemtra) {
+            // 1. Xử lý va chạm với tường
+            double speed = ball.getSpeed();
+            if (ball.getX() - ball.getRadius() < 0) {
+                ball.setDx(Math.abs(ball.getDx()));
+                ball.setX(ball.getRadius());
             }
+            if (ball.getX() + ball.getRadius() > width) {
+                ball.setDx(-Math.abs(ball.getDx()));
+                ball.setX(width - ball.getRadius());
+            }
+
+            if (ball.getY() - ball.getRadius() < 0) {
+                ball.setDy(Math.abs(ball.getDy()));
+                ball.setY(ball.getRadius());
+            }
+
+            // 2. Va chạm với paddle
+            if (ball.checkCollision(paddle) && ball.getDy() > 0) {
+                ball.bounceOffPaddle(paddle);
+            }
+
+            // 3. Va chạm với gạch
+            for (Brick b : bricks) {
+                if (!b.isDestroyed() && ball.checkCollision(b)) {
+                    ball.bounceOff(b);
+                    b.takeHit();
+                    score += 100;
+
+                    if (b.isDestroyed()) {
+                        Random r = new Random();
+                        int chance = r.nextInt(100);
+                        if (chance < 30) {
+                            String[] types = {"FAST_BALL", "DEATH"};
+                            String type = types[r.nextInt(types.length)];
+                            powerUps.add(new PowerUp(b.getX() + b.getWidth() / 2, b.getY(), type));
+                        }
+                    }
+                    break;
+                }
+            }
+
+            // 4. Cập nhật vị trí bóng SAU khi xử lý va chạm
+            ball.update();
         }
+
 
 
         List<PowerUp> toRemove = new ArrayList<>();
@@ -150,8 +167,10 @@ public class GameManager {
         // bóng rơi ra khỏi màn hình
         if (ball.getY() > height) {
             lives--;
+            InputManager.waitForRestart();
             kiemtra = false;
             ball.clearTrail();
+
             if (lives > 0) {
                 resetBall();;
             }
@@ -162,7 +181,9 @@ public class GameManager {
     private void resetBall() {
         ball.setX(paddle.getX() + paddle.getWidth() / 2);
         ball.setY(paddle.getY() - ball.getRadius());
-        ball.setDy(-Math.abs(ball.getDy()));
+        ball.setDx(1);
+        ball.setDy(0);
+        ball.setSpeed(baseSpeed);
     }
 
 
@@ -185,7 +206,7 @@ public class GameManager {
 
     public void setGameLoop(Scene scene, GraphicsContext gc) {
             init();
-            InputManager.attach(scene, paddle);
+            InputManager.attach(scene, paddle, ball);
 
             new AnimationTimer() {
                 @Override
