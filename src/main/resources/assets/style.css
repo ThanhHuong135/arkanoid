@@ -1,0 +1,63 @@
+.root {
+    -fx-background-color: #0b0b28;
+    -fx-padding: 40;
+}
+
+.left-pane {
+    -fx-background-color: linear-gradient(to bottom right, #6a5acd, #9370db);
+    -fx-padding: 20;
+    -fx-background-radius: 20;
+}
+
+.right-pane {
+    -fx-background-color: #0d0d1a;
+    -fx-padding: 30;
+    -fx-background-radius: 20;
+}
+
+.title-label {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: CYAN;
+    -fx-font-family: "Arial";
+}
+
+.menu-button {
+    -fx-pref-width: 200;
+    -fx-pref-height: 40;
+    -fx-font-size: 16px;
+    -fx-font-family: "Arial";
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 2, 0.5, 0, 1);
+}
+
+/* Hover effect: nổi lên, phóng to, đổ bóng */
+.menu-button:hover {
+    -fx-translate-y: -5px; /* nổi lên cao hơn */
+    -fx-scale-x: 1.1;      /* phóng to rõ hơn */
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 15, 0.5, 0, 6); /* bóng đậm và xa hơn */
+}
+
+
+#start-btn {
+    -fx-background-color: #ff6b6b;
+}
+
+#settings-btn {
+    -fx-background-color: #4ecdc4;
+}
+
+#ranking-btn {
+    -fx-background-color: #ffe66d;
+}
+
+#guide-btn {
+    -fx-background-color: #9d4edd;
+}
+
+#exit-btn {
+    -fx-background-color: #444;
+}
