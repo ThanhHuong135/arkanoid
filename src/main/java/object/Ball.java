@@ -30,7 +30,7 @@ public class Ball extends MovableObject {
         }
     }
 
-    public double getRadius(){
+    public double getRadius() {
         return radius;
     }
 
@@ -78,10 +78,10 @@ public class Ball extends MovableObject {
         } else {
             dx *= -1;
         }*/
-        double speed = Math.sqrt(dx*dx + dy*dy);
+        double speed = Math.sqrt(dx * dx + dy * dy);
 
-        double objCenterX = other.getX() + other.getWidth()/2;
-        double objCenterY = other.getY() + other.getHeight()/2;
+        double objCenterX = other.getX() + other.getWidth() / 2;
+        double objCenterY = other.getY() + other.getHeight() / 2;
 
         double diffX = x - objCenterX;
         double diffY = y - objCenterY;
@@ -93,7 +93,7 @@ public class Ball extends MovableObject {
         }
 
         // Giữ tốc độ
-        double currentSpeed = Math.sqrt(dx*dx + dy*dy);
+        double currentSpeed = Math.sqrt(dx * dx + dy * dy);
         dx = dx / currentSpeed * speed;
         dy = dy / currentSpeed * speed;
     }
@@ -101,53 +101,22 @@ public class Ball extends MovableObject {
     public void bounceOffPaddle(GameObject paddle) {
         double speed = 3.5;
 
-        // Tính vị trí chạm (0 = mép trái, 1 = mép phải)
+        // Tính vị trí chạm (0 ở mép trái, 1 ở mép phải)
         double hitPos = (x - paddle.getX()) / paddle.getWidth();
-        hitPos = Math.max(0, Math.min(1, hitPos));
+        hitPos = Math.max(0, Math.min(1, hitPos)); // đảm bảo trong [0,1]
+        double angle = Math.toRadians(-60 + 120 * hitPos);
 
-        // Góc nảy từ -60° (trái) đến +60° (phải)
-        double minAngle = -60;
-        double maxAngle = 60;
-        double angle = Math.toRadians(minAngle + (maxAngle - minAngle) * hitPos);
-
-        // Tính tâm của bóng và paddle
-        double ballCenterX = x + radius;
-        double ballCenterY = y + radius;
-        double paddleCenterX = paddle.getX() + paddle.getWidth() / 2.0;
-        double paddleCenterY = paddle.getY() + paddle.getHeight() / 2.0;
-
-        double dxFromCenter = ballCenterX - paddleCenterX;
-        double dyFromCenter = ballCenterY - paddleCenterY;
-
-        // Nếu va từ bên trái/phải → đổi hướng ngang
-        if (Math.abs(dxFromCenter) > Math.abs(dyFromCenter)) {
-            dx = (dxFromCenter > 0) ? Math.abs(dx) : -Math.abs(dx);
-            dy = Math.abs(speed * Math.sin(angle)); // đi xuống để không "leo" lên paddle
-            return;
-        }
-
-        // Nếu va từ dưới paddle → bật xuống
-        if (dyFromCenter > 0) {
-            dy = Math.abs(speed); // đi xuống
-            return;
-        }
-
-        // Nếu va từ trên (trường hợp bình thường)
-        double minVertical = Math.toRadians(30);
-        if (Math.abs(angle) < minVertical) {
-            angle = (angle < 0 ? -minVertical : minVertical);
-        }
-
-        dx = speed * Math.cos(angle);
-        dy = -Math.abs(speed * Math.sin(angle)); //*
+        // Cập nhật vận tốc theo góc
+        dx = speed * Math.sin(angle);
+        dy = -speed * Math.cos(angle); // âm vì bóng bật lên
+        if(paddle.y < y) dy = speed * Math.cos(angle);
     }
 
 
-        public boolean checkCollision(GameObject obj) {
-        double closestX = Math.max(obj.getX(), Math.min(x, obj.getX() + obj.getWidth()));
-        double closestY = Math.max(obj.getY(), Math.min(y, obj.getY() + obj.getHeight()));
-        double dx = x - closestX;
-        double dy = y - closestY;
-        return (dx * dx + dy * dy) <= (radius * radius);
+    public boolean checkCollision(GameObject obj) {
+        return x + radius > obj.getX() &&
+                x - radius < obj.getX() + obj.getWidth() &&
+                y + radius > obj.getY() &&
+                y - radius < obj.getY() + obj.getHeight();
     }
 }

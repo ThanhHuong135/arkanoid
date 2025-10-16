@@ -62,6 +62,7 @@ public class Brick extends GameObject {
     public void takeHit() {
         if (!breaking && hitPoints > 0) {
             breaking = true;
+            hitPoints--;
             generateParticles();
         }
     }
