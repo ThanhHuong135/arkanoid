@@ -4,21 +4,28 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import object.Ball;
-import object.Brick;
-import object.Paddle;
-import object.PowerUp;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import level.Level;
+import object.*;
+
+
+import java.util.*;
+
+
 public class GameManager {
 
     private Ball ball;
     private Paddle paddle;
+
     private List<Brick> bricks;
+    private BrickType[][] levelBricks;
+    private Map<BrickType, Color> brickColors = new HashMap<>();
+
+
     private List<PowerUp> powerUps;
 
     private int score = 0;
@@ -37,18 +44,29 @@ public class GameManager {
         baseSpeed = ball.getSpeed();
 
         powerUps = new ArrayList<>();
+
+
+        levelBricks = Level.load("level_1.csv");
+
         bricks = new ArrayList<>();
-        double brickGap = 5;
+        double brickGap = 10;
         double brickWidth = (width - 9 * brickGap) / 8;
         double brickHeight = 30;
         Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
                 Color.web("#ffe66d"), Color.web("#9d4edd")};
 
-        for (int row = 0; row < 5; row++) {
-            for (int col = 0; col < 8; col++) {
+        for (int row = 0; row < levelBricks.length; row++) {
+            for (int col = 0; col < levelBricks[row].length; col++) {
                 double x = brickGap + col * (brickWidth + brickGap);
                 double y = 50 + row * (brickHeight + brickGap);
-                bricks.add(new Brick(x, y, brickWidth, brickHeight, 1, colors[(row * 6 + col) % colors.length]));
+
+                BrickType type = levelBricks[row][col];
+                if (type != BrickType.EMPTY) {
+                    Color brickColor = brickColors.get(type);
+                    if (brickColor == null) {}
+                    bricks.add(new Brick(type, x, y, brickWidth, brickHeight));
+                }
+//                bricks.add(new Brick(x, y, brickWidth, brickHeight, 1, colors[(row * 6 + col) % colors.length]));
             }
         }
     }
@@ -220,4 +238,4 @@ public class GameManager {
                 }
             }.start();
         }
-    }
+}

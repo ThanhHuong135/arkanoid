@@ -32,3 +32,4 @@ javafx {
 tasks.test {
     useJUnitPlatform()
 }
+

@@ -26,7 +26,6 @@ public class InputManager {
                             double angle = Math.toRadians(-45 + Math.random() * 90); // -45° → 45°
                             ball.setDx(speed * Math.sin(angle));
                             ball.setDy(-speed * Math.cos(angle)); // âm vì bóng đi lên
-
                             gm.startGame();
                         }
                     }

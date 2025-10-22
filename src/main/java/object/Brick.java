@@ -13,13 +13,17 @@ public class Brick extends GameObject {
     private int hitPoints;
     private Color color;
 
+    private BrickType type;
+
     private boolean breaking = false;       // trạng thái hiệu ứng vỡ
     private List<BrickParticle> particles = new ArrayList<>();
 
-    public Brick(double x, double y, double width, double height, int hitPoints, Color color) {
+    public Brick(BrickType type,double x, double y, double width, double height) {
         super(x, y, width, height);
-        this.hitPoints = hitPoints;
-        this.color = color;
+        this.type = type;
+        this.hitPoints = type.getHitPoint();
+        this.color = type.getColor();
+
     }
 
     @Override
@@ -59,10 +63,27 @@ public class Brick extends GameObject {
         }
     }
 
+    public BrickType getType() {
+        return type;
+    }
+
+    public void setType(BrickType type) {
+        this.type = type;
+    }
+
+    public int getHitPoints() {
+        return hitPoints;
+    }
+
+    public void setHitPoints(int hitPoints) {
+        this.hitPoints = hitPoints;
+    }
+
     public void takeHit() {
-        if (!breaking && hitPoints > 0) {
+        hitPoints--;
+        if (!breaking && hitPoints == 0) {
             breaking = true;
-            hitPoints--;
+
             generateParticles();
         }
     }
