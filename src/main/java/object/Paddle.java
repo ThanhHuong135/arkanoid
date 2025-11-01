@@ -1,9 +1,12 @@
 package object;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Paddle extends MovableObject {
+
+    private Image paddleImage;
 
     private boolean goLeft, goRight;
 
@@ -24,11 +27,13 @@ public class Paddle extends MovableObject {
     }
 
     public Paddle(double x, double y) {
-        super(x, y, 120, 30);
+        super(x, y, 120, 60);
+        loadImage();
     }
 
     public Paddle(double x, double y, double width, double height) {
         super(x, y, width, height);
+        loadImage();
     }
 
     public void moveLeft() {
@@ -47,8 +52,12 @@ public class Paddle extends MovableObject {
         //
     }
 
+    private void loadImage() {
+        // Đường dẫn tương đối trong thư mục resources (nếu dùng Maven/Gradle)
+        paddleImage = new Image(getClass().getResourceAsStream("/assets/paddle/paddle.png"));
+    }
+
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.ORANGE);
-        gc.fillRoundRect(x, y, width, height, 15, 15);  // bo góc 15px
+        gc.drawImage(paddleImage, x, y, width, height);
     }
 }

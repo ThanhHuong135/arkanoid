@@ -12,7 +12,7 @@ import manager.GameManager;
 public class GameScreen {
 
     public static Scene createScene(Stage stage) {
-        // Background ImageView
+        // --- Background ImageView ---
         Image bgImage = new Image(GameScreen.class.getResourceAsStream("/assets/images/background-game-screen.png"));
         ImageView bgView = new ImageView(bgImage);
         bgView.setFitWidth(700);
@@ -20,11 +20,11 @@ public class GameScreen {
         bgView.setPreserveRatio(false);
         bgView.setSmooth(false);
 
-        // Canvas để vẽ các object
+        // --- Canvas để vẽ các object ---
         Canvas canvas = new Canvas(700, 650);
         // canvas mặc định trong suốt → background nhìn thấy
 
-        // StackPane chứa background và canvas
+        // --- StackPane chứa background và canvas ---
         StackPane root = new StackPane(bgView, canvas);
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -34,7 +34,7 @@ public class GameScreen {
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
         );
 
-        // Game loop
+        // --- Game loop ---
         GameManager gameManager = new GameManager();
         gameManager.setGameLoop(scene, gc);
 

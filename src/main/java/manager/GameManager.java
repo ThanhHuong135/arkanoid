@@ -39,8 +39,21 @@ public class GameManager {
     private double basePaddleWidth; // chiều rộng gốc của paddle
 
     public void init() {
-        paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
-        ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 3, 1, -1, true);
+        // Tạo paddle ở giữa, cách đáy 50px
+        double paddleWidth = 120;
+        double paddleHeight = 30;
+        double paddleX = (width - paddleWidth) / 2;
+        double paddleY = height - paddleHeight - 30; // cách mép dưới 30px
+
+        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight);
+
+        // Tạo bóng nằm giữa paddle, ngay phía trên
+        double ballRadius = 10;
+        double ballX = paddle.getX() + paddle.getWidth() / 2;
+        double ballY = paddle.getY() - ballRadius - 1; // đặt sát trên paddle 1px
+        double ballSpeed = 3;
+
+        ball = new Ball(ballX, ballY, ballRadius, ballSpeed, 1, -1, true);
         baseSpeed = ball.getSpeed();
 
         powerUps = new ArrayList<>();
@@ -72,9 +85,7 @@ public class GameManager {
     }
 
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.web("#0b0b28"));
-        gc.fillRect(0, 0, width, height);
-
+        gc.clearRect(0, 0, width, height);
         // bricks
         for (Brick b : bricks) {
             b.update();
