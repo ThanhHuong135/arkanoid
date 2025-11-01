@@ -8,18 +8,33 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import object.Ball;
 import object.Paddle;
-
 import java.net.URL;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 
 public class MainMenuScreen extends Application {
 
     public void start(Stage stage) {
+
+        // === VIDEO BACKGROUND ===
+        URL videoPath = getClass().getResource("/assets/images/background.mp4");
+        Media media = new Media(videoPath.toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setAutoPlay(true);
+
+        MediaView mediaView = new MediaView(mediaPlayer);
+        mediaView.setFitWidth(800);
+        mediaView.setFitHeight(500);
+        mediaView.setPreserveRatio(false);
         // LEFT: Game Demo
         VBox leftPane = new VBox();
         leftPane.setSpacing(20);
@@ -67,8 +82,9 @@ public class MainMenuScreen extends Application {
         rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
 
         // MAIN LAYOUT
-        HBox root = new HBox(80, leftPane, rightPane);
-        root.getStyleClass().add("root");
+        HBox content = new HBox(80, leftPane, rightPane);
+        //content.getStyleClass().add("root");
+        StackPane root = new StackPane(mediaView, content);
 
         Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets().add(

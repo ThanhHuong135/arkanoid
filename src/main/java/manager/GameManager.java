@@ -49,7 +49,7 @@ public class GameManager {
         levelBricks = Level.load("level_1.csv");
 
         bricks = new ArrayList<>();
-        double brickGap = 10;
+        double brickGap = 3;
         double brickWidth = (width - 9 * brickGap) / 8;
         double brickHeight = 30;
         Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
@@ -61,7 +61,7 @@ public class GameManager {
                 double y = 50 + row * (brickHeight + brickGap);
 
                 BrickType type = levelBricks[row][col];
-                if (type != BrickType.EMPTY) {
+                if (type != null) {
                     Color brickColor = brickColors.get(type);
                     if (brickColor == null) {}
                     bricks.add(new Brick(type, x, y, brickWidth, brickHeight));
