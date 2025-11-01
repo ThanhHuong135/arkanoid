@@ -91,7 +91,7 @@ public class Ball extends MovableObject {
         double diffX = x - objCenterX;
         double diffY = y - objCenterY;
 
-        if (Math.abs(diffX) > Math.abs(diffY)) {
+      if (Math.abs(diffX) > Math.abs(diffY)) {
             dx = -dx; // va chạm ngang
         } else {
             dy = -dy; // va chạm dọc
