@@ -4,6 +4,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +26,9 @@ public class GameManager {
     private List<Brick> bricks;
     private BrickType[][] levelBricks;
     private Map<BrickType, Color> brickColors = new HashMap<>();
-
-
-    private List<PowerUp> powerUps;
+    private double baseSpeed;
+    private double basePaddleWidth;
+    private PowerUpManager powerUpManager;
 
     private int score = 0;
     private int lives = 3;
@@ -35,15 +37,14 @@ public class GameManager {
     private final double height = 650;
     boolean kiemtra = false;
     private boolean gameOver = false;
-    private double baseSpeed; // tốc độ gốc của bóng
-    private double basePaddleWidth; // chiều rộng gốc của paddle
 
     public void init() {
         paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
         ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 3, 1, -1, true);
         baseSpeed = ball.getSpeed();
+        basePaddleWidth = paddle.getWidth();
 
-        powerUps = new ArrayList<>();
+        powerUpManager = new PowerUpManager(this, ball, paddle, baseSpeed, basePaddleWidth);
 
 
         levelBricks = Level.load("level_1.csv");
@@ -85,10 +86,8 @@ public class GameManager {
         paddle.render(gc);
         ball.render(gc);
 
-        // power-ups
-        for (PowerUp p : powerUps) {
-            p.render(gc);
-        }
+        powerUpManager.render(gc);
+
 
         // score & lives
         gc.setFill(Color.WHITE);
@@ -150,15 +149,8 @@ public class GameManager {
                     score += 100;
 
                     if (b.isDestroyed()) {
-                        Random r = new Random();
-                        int chance = r.nextInt(100);
-                        if (chance < 30) {
-                            String[] types = {"FAST_BALL", "DEATH"};
-                            String type = types[r.nextInt(types.length)];
-                            powerUps.add(new PowerUp(b.getX() + b.getWidth() / 2, b.getY(), type));
-                        }
+                        powerUpManager.spawn(b.getX() + b.getWidth()/2, b.getY());
                     }
-                    break;
                 }
             }
 
@@ -166,25 +158,7 @@ public class GameManager {
             ball.update();
         }
 
-
-
-        List<PowerUp> toRemove = new ArrayList<>();
-        for (PowerUp p : powerUps) {
-            p.update();
-
-            // Nếu paddle hứng được power-up
-            if (p.checkCollision(paddle)) {
-                applyPowerUp(p);
-                toRemove.add(p); // đánh dấu để xóa sau
-            }
-            // Nếu power-up rơi khỏi màn hình
-            else if (p.getY() > height) {
-                toRemove.add(p);
-            }
-        }
-
-        // Xóa các power-up đã dùng hoặc rơi khỏi màn hình
-        powerUps.removeAll(toRemove);
+        powerUpManager.update();
 
         // bóng rơi ra khỏi màn hình
         if (ball.getY() > height) {
@@ -208,34 +182,21 @@ public class GameManager {
         ball.setSpeed(baseSpeed);
     }
 
-
-    private void applyPowerUp(PowerUp p) {
-        String type = p.getType();
-
-        switch (type) {
-            case "FAST_BALL":
-                ball.setSpeed(ball.getSpeed() * 1.3);
-                break;
-            case "DEATH":
-                gameOver = true;
-                break;
-            default:
-                // Nếu có loại mới trong tương lai
-                break;
-        }
+    public void setGameOver(boolean value) {
+        this.gameOver = value;
     }
 
 
     public void setGameLoop(Scene scene, GraphicsContext gc) {
-            init();
-            InputManager.attach(scene, paddle, ball, this);
+        init();
+        InputManager.attach(scene, paddle, ball, this);
 
-            new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                    update();
-                    render(gc);
-                }
-            }.start();
-        }
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+                render(gc);
+            }
+        }.start();
+    }
 }

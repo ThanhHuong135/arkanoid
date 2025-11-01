@@ -27,6 +27,14 @@ public class Paddle extends MovableObject {
         super(x, y, 120, 30);
     }
 
+    public double getWidth() {
+        return super.getWidth();
+    }
+
+    public void setWidth(double newWidth) {
+        this.width = newWidth;
+    }
+
     public Paddle(double x, double y, double width, double height) {
         super(x, y, width, height);
     }
@@ -42,13 +50,25 @@ public class Paddle extends MovableObject {
 
     }
 
+    public void increaseWidth(){
+        this.width *= 1.1;
+        if (this.width > 400) {
+            this.width = 400;
+        }
+    }
+
     @Override
     public void update() {
         //
     }
 
+    private Color color = Color.ORANGE;
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.ORANGE);
+        gc.setFill(color);
         gc.fillRoundRect(x, y, width, height, 15, 15);  // bo góc 15px
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 }
