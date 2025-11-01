@@ -42,13 +42,23 @@ public class Ball extends MovableObject {
         this.speed = speed;
     }
 
+    private Color color = Color.AQUA;
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public void render(GraphicsContext gc) {
         // Vẽ vệt đuôi nếu có
         if (trailEffect != null) {
             trailEffect.render(gc);
         }
         // Vẽ bóng
-        gc.setFill(Color.AQUA);
+        gc.setFill(color);
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
