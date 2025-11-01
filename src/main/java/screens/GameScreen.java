@@ -9,7 +9,7 @@ import manager.GameManager;
 
 public class GameScreen {
 
-    public static Scene createScene(Stage stage) {
+    public static Scene createScene(Stage stage, String levelPath) {
         StackPane root = new StackPane();
         root.getStyleClass().add("root"); // áp CSS
 
@@ -23,7 +23,7 @@ public class GameScreen {
         );
 
         GameManager gameManager = new GameManager();
-        gameManager.setGameLoop(scene, gc);
+        gameManager.setGameLoop(scene, gc, levelPath);
 
         return scene;
     }

@@ -38,16 +38,18 @@ public class GameManager {
     private double baseSpeed; // tốc độ gốc của bóng
     private double basePaddleWidth; // chiều rộng gốc của paddle
 
-    public void init() {
+    public int getScore() {
+        return this.score;
+    }
+
+    public void init(String levelPath) {
         paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
         ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 3, 1, -1, true);
         baseSpeed = ball.getSpeed();
 
         powerUps = new ArrayList<>();
 
-
-        levelBricks = Level.load("level_1.csv");
-
+        levelBricks = Level.load(levelPath);
         bricks = new ArrayList<>();
         double brickGap = 10;
         double brickWidth = (width - 9 * brickGap) / 8;
@@ -68,6 +70,7 @@ public class GameManager {
                 }
 //                bricks.add(new Brick(x, y, brickWidth, brickHeight, 1, colors[(row * 6 + col) % colors.length]));
             }
+
         }
     }
 
@@ -226,16 +229,16 @@ public class GameManager {
     }
 
 
-    public void setGameLoop(Scene scene, GraphicsContext gc) {
-            init();
-            InputManager.attach(scene, paddle, ball, this);
+    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath) {
+        init(levelPath);
+        InputManager.attach(scene, paddle, ball, this);
 
-            new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                    update();
-                    render(gc);
-                }
-            }.start();
-        }
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+                render(gc);
+            }
+        }.start();
+    }
 }
