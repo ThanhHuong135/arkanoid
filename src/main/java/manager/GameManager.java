@@ -4,11 +4,17 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import level.Level;
 import object.*;
 
 
 import java.util.*;
+
 
 public class GameManager {
 
@@ -18,6 +24,7 @@ public class GameManager {
     private List<Brick> bricks;
     private BrickType[][] levelBricks;
     private Map<BrickType, Color> brickColors = new HashMap<>();
+
 
     private List<PowerUp> powerUps;
 
@@ -44,7 +51,7 @@ public class GameManager {
 
         levelBricks = Level.load(levelPath);
         bricks = new ArrayList<>();
-        double brickGap = 5;
+        double brickGap = 10;
         double brickWidth = (width - 9 * brickGap) / 8;
         double brickHeight = 30;
         Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
@@ -90,6 +97,10 @@ public class GameManager {
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 20, 25);
         gc.fillText("Lives: " + lives, width - 100, 25);
+    }
+
+    public void startGame() {
+        kiemtra = true;
     }
 
     public void update() {
@@ -220,7 +231,7 @@ public class GameManager {
 
     public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath) {
         init(levelPath);
-        InputManager.attach(scene, paddle, ball);
+        InputManager.attach(scene, paddle, ball, this);
 
         new AnimationTimer() {
             @Override

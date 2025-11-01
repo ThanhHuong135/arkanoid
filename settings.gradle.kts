@@ -1,1 +1,1 @@
-rootProject.name = "Arkanoid_H"
+rootProject.name = "arkanoid2"

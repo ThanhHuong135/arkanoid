@@ -12,6 +12,7 @@ public class Brick extends GameObject {
 
     private int hitPoints;
     private Color color;
+
     private BrickType type;
 
     private boolean breaking = false;       // trạng thái hiệu ứng vỡ
@@ -22,6 +23,7 @@ public class Brick extends GameObject {
         this.type = type;
         this.hitPoints = type.getHitPoint();
         this.color = type.getColor();
+
     }
 
     @Override

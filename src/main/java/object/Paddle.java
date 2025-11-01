@@ -37,8 +37,9 @@ public class Paddle extends MovableObject {
 
     // Di chuyển phải
     public void moveRight(double sceneWidth) {
-        if(this.getX() + this.getWidth() < sceneWidth)
-            setX(getX() + 5);// không ra ngoài phải
+       if(this.getX() + this.getWidth() < sceneWidth)
+           setX(getX() + 5);// không ra ngoài phải
+
     }
 
     @Override

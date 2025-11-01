@@ -1,53 +1,35 @@
 plugins {
-    java
-    application
-    id("org.javamodularity.moduleplugin") version "1.8.15"
+    id("application")
     id("org.openjfx.javafxplugin") version "0.0.13"
-    id("org.beryx.jlink") version "2.25.0"
 }
 
-group = "com.example"
+group = "org.example"
 version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
 }
 
-val junitVersion = "5.12.1"
+dependencies {
+    implementation("org.openjfx:javafx-controls:25")
+    implementation("org.openjfx:javafx-fxml:25")
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
-    }
-}
-
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
+    testImplementation(platform("org.junit:junit-bom:5.10.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 application {
-    mainModule.set("com.example.arkanoid_h")
-    mainClass.set("com.example.arkanoid_h.HelloApplication")
+    // Thay bằng class Main chứa hàm main() của bạn
+    mainClass.set("screens.MainMenuScreen")
 }
 
 javafx {
-    version = "21.0.6"
+    version = "22" // hoặc "22" nếu bạn dùng JDK 22
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-}
-
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
 }
 
-jlink {
-    imageZip.set(layout.buildDirectory.file("/distributions/app-${javafx.platform.classifier}.zip"))
-    options.set(listOf("--strip-debug", "--compress", "2", "--no-header-files", "--no-man-pages"))
-    launcher {
-        name = "app"
-    }
-}

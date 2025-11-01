@@ -4,7 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ae02aa4-db0f-4d27-bb46-1f08c7b6c499" name="Changes" comment="" />
+    <list default="true" id="9ae02aa4-db0f-4d27-bb46-1f08c7b6c499" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/wayne.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/level/Level.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/object/BrickType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/level_1.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/level/BaseLevel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/level/LevelOne.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/manager/InputManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/manager/InputManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Ball.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Brick.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/object/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Paddle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/render/Rendered.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/render/Rendered.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/style.css" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,6 +45,21 @@
     <analyzeAfterCompile>true</analyzeAfterCompile>
     <toolWindowToFront>false</toolWindowToFront>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;NguyenTuanAnh16&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ThanhHuong135/arkanoid.git&quot;,
+    &quot;accountId&quot;: &quot;940f3603-52e9-4abe-8e6a-9def71fe3f56&quot;
+  }
+}</component>
   <component name="ProblemsViewState">
     <option name="showPreview" value="true" />
   </component>
@@ -41,20 +77,22 @@
     <option name="sortByType" value="true" />
     <option name="sortKey" value="BY_TYPE" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.com.example.arkanoid_h.Main.executor&quot;: &quot;Run&quot;,
-    &quot;Application.org.example.Main.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Hao/OOP/Arkanoid_H&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.com.example.arkanoid_h.Main.executor": "Run",
+    "Application.org.example.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging tuananh",
+    "last_opened_file_path": "C:/Users/Admin/Hao/OOP/Arkanoid_H",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Application.org.example.Main">
     <configuration name="&lt;template&gt;" type="TestNG" default="true" selected="false">
       <option name="VM_PARAMETERS" value="-ea" />
@@ -71,7 +109,7 @@
     </configuration>
     <configuration name="org.example.Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
-      <module name="Arkanoid_H" />
+      <module name="arkanoid" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="JUnit" factoryName="JUnit">

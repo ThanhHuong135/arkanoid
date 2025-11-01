@@ -10,7 +10,7 @@ public class InputManager {
     private static boolean gameStarted = false; // Đã bấm Space chưa
     private static boolean waitingForRestart = false; // Đang đợi bấm Space sau khi chết
 
-    public static void attach(Scene scene, Paddle paddle, Ball ball) {
+    public static void attach(Scene scene, Paddle paddle, Ball ball, GameManager gm) {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -26,6 +26,7 @@ public class InputManager {
                             double angle = Math.toRadians(-45 + Math.random() * 90); // -45° → 45°
                             ball.setDx(speed * Math.sin(angle));
                             ball.setDy(-speed * Math.cos(angle)); // âm vì bóng đi lên
+                            gm.startGame();
                         }
                     }
                 }
