@@ -4,33 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9ae02aa4-db0f-4d27-bb46-1f08c7b6c499" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/brick/hard-brick/hard-brick-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/brick/hard-brick/hard-brick-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/brick/hard-brick/hard-brick-3.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/brick/medium-brick/medium-brick-1.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/brick/medium-brick/medium-brick-2.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/brick/normal-brick/normal.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/images/background-game-screen.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/images/background.mp4" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/assets/paddle/paddle.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/Ball.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Ball.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/Brick.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Brick.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/BrickType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/BrickType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/MovableObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/MovableObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/Paddle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/Paddle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/object/PowerUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/object/PowerUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/screens/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/style.css" afterDir="false" />
-    </list>
+    <list default="true" id="9ae02aa4-db0f-4d27-bb46-1f08c7b6c499" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -134,7 +108,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging tuananh",
+    "git-widget-placeholder": "tuananh",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "D:/project/arkanoid2",
