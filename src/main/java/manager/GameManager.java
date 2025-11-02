@@ -40,7 +40,7 @@ public class GameManager {
 
     public void init() {
         paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
-        ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 3, 1, -1, true);
+        ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 2, 1, -1, true);
         baseSpeed = ball.getSpeed();
 
         powerUps = new ArrayList<>();
