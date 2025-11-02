@@ -3,6 +3,8 @@ package screens;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import manager.GameManager;
@@ -10,11 +12,21 @@ import manager.GameManager;
 public class GameScreen {
 
     public static Scene createScene(Stage stage) {
-        StackPane root = new StackPane();
-        root.getStyleClass().add("root"); // áp CSS
+        // --- Background ImageView ---
+        Image bgImage = new Image(GameScreen.class.getResourceAsStream("/assets/images/background-game-screen.png"));
+        ImageView bgView = new ImageView(bgImage);
+        bgView.setFitWidth(700);
+        bgView.setFitHeight(650);
+        bgView.setPreserveRatio(false);
+        bgView.setSmooth(false);
 
+        // --- Canvas để vẽ các object ---
         Canvas canvas = new Canvas(700, 650);
-        root.getChildren().add(canvas);
+        // canvas mặc định trong suốt → background nhìn thấy
+
+        // --- StackPane chứa background và canvas ---
+        StackPane root = new StackPane(bgView, canvas);
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         Scene scene = new Scene(root, 700, 650);
@@ -22,6 +34,7 @@ public class GameScreen {
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
         );
 
+        // --- Game loop ---
         GameManager gameManager = new GameManager();
         gameManager.setGameLoop(scene, gc);
 

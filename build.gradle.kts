@@ -26,7 +26,7 @@ application {
 
 javafx {
     version = "22" // hoặc "22" nếu bạn dùng JDK 22
-    modules = listOf("javafx.controls", "javafx.fxml")
+    modules = listOf("javafx.controls", "javafx.fxml", "javafx.media")
 }
 
 tasks.test {

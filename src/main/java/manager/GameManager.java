@@ -37,10 +37,25 @@ public class GameManager {
     private boolean gameOver = false;
     private double baseSpeed; // tốc độ gốc của bóng
     private double basePaddleWidth; // chiều rộng gốc của paddle
+    private boolean explodePaddle = true;
 
     public void init() {
-        paddle = new Paddle((width - 120) / 2, height - 50, 120, 20);
-        ball = new Ball((width - 120) / 2 + 60, height - 60, 10, 2, 1, -1, true);
+        // Tạo paddle ở giữa, cách đáy 50px
+        double paddleWidth = 120;
+        double paddleHeight = 30;
+        double paddleX = (width - paddleWidth) / 2;
+        double paddleY = height - paddleHeight - 30; // cách mép dưới 30px
+
+        paddle = new Paddle(paddleX, paddleY, paddleWidth, paddleHeight);
+
+        // Tạo bóng nằm giữa paddle, ngay phía trên
+        double ballRadius = 10;
+        double ballX = paddle.getX() + paddle.getWidth() / 2;
+        double ballY = paddle.getY() - ballRadius - 1; // đặt sát trên paddle 1px
+        double ballSpeed = 1.5;
+
+        ball = new Ball(ballX, ballY, ballRadius, ballSpeed, 1, -1, true);
+
         baseSpeed = ball.getSpeed();
 
         powerUps = new ArrayList<>();
@@ -49,7 +64,7 @@ public class GameManager {
         levelBricks = Level.load("level_1.csv");
 
         bricks = new ArrayList<>();
-        double brickGap = 10;
+        double brickGap = 3;
         double brickWidth = (width - 9 * brickGap) / 8;
         double brickHeight = 30;
         Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
@@ -61,7 +76,7 @@ public class GameManager {
                 double y = 50 + row * (brickHeight + brickGap);
 
                 BrickType type = levelBricks[row][col];
-                if (type != BrickType.EMPTY) {
+                if (type != null) {
                     Color brickColor = brickColors.get(type);
                     if (brickColor == null) {}
                     bricks.add(new Brick(type, x, y, brickWidth, brickHeight));
@@ -72,9 +87,7 @@ public class GameManager {
     }
 
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.web("#0b0b28"));
-        gc.fillRect(0, 0, width, height);
-
+        gc.clearRect(0, 0, width, height);
         // bricks
         for (Brick b : bricks) {
             b.update();
@@ -82,7 +95,10 @@ public class GameManager {
         }
 
         // paddle & ball
+        if(explodePaddle == true){
         paddle.render(gc);
+        }
+
         ball.render(gc);
 
         // power-ups
@@ -94,13 +110,15 @@ public class GameManager {
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 20, 25);
         gc.fillText("Lives: " + lives, width - 100, 25);
+        paddle.renderExplosion(gc);
+        paddle.renderBlink(gc);
     }
 
     public void startGame() {
         kiemtra = true;
     }
 
-    public void update() {
+    public void update(GraphicsContext gc) {
         if (gameOver) return;
 
         if (InputManager.isGameStarted()) {
@@ -146,6 +164,7 @@ public class GameManager {
             for (Brick b : bricks) {
                 if (!b.isDestroyed() && ball.checkCollision(b)) {
                     ball.bounceOff(b);
+                    ball.update();
                     b.takeHit();
                     score += 100;
 
@@ -175,6 +194,16 @@ public class GameManager {
             // Nếu paddle hứng được power-up
             if (p.checkCollision(paddle)) {
                 applyPowerUp(p);
+                if(p.getType() == "DEATH") {
+                    double cx = p.getX() + p.getWidthDeath() / 2;       // chính giữa theo ngang
+                    double cy = p.getY() + p.getHeightDeath();          // đáy item → chạm paddle
+                    paddle.explode(cx, cy);  // nổ tại vị trí chạm
+                    explodePaddle = false;
+                }
+                else {
+                  paddle.triggerSpeedBlink();
+                }
+
                 toRemove.add(p); // đánh dấu để xóa sau
             }
             // Nếu power-up rơi khỏi màn hình
@@ -233,7 +262,7 @@ public class GameManager {
             new AnimationTimer() {
                 @Override
                 public void handle(long now) {
-                    update();
+                    update(gc);
                     render(gc);
                 }
             }.start();

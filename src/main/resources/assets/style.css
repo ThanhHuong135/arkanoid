@@ -16,10 +16,11 @@
 }
 
 .title-label {
+    -fx-font-family: "Orbitron"; /* hoặc Arial Black */
     -fx-font-size: 36px;
+    -fx-text-fill: cyan;
     -fx-font-weight: bold;
-    -fx-text-fill: CYAN;
-    -fx-font-family: "Arial";
+    -fx-effect: dropshadow(gaussian, cyan, 25, 0.4, 0, 0);
 }
 
 .menu-button {

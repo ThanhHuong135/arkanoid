@@ -78,7 +78,7 @@ public class Ball extends MovableObject {
     }
 
     public void bounceOff(GameObject other) {
-        double speed = 2.5;
+        double speed = 1.5;
 
         // Tính vị trí chạm (0 ở mép trái, 1 ở mép phải)
         double hitPos = (x - other.getX()) / other.getWidth();
@@ -93,7 +93,7 @@ public class Ball extends MovableObject {
     }
 
     public void bounceOffPaddle(GameObject paddle) {
-        double speed = 2;
+        double speed = 1.5;
 
         // Tính vị trí chạm (0 ở mép trái, 1 ở mép phải)
         double hitPos = (x - paddle.getX()) / paddle.getWidth();
