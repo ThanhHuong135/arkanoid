@@ -52,6 +52,7 @@ public class LevelScreen {
                 Scene gameScene = GameScreen.createScene(stage, levelPath.get());
                 stage.setScene(gameScene); // chuyển ngay sang GameScreen
                 stage.setTitle("Arkanoid");  // set title cho GameScreen
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -82,7 +83,14 @@ public class LevelScreen {
             }
         });
         Button btnBack = createMenuButton("⬅ QUAY LẠI", "back-btn");
-        btnBack.setOnAction(e -> System.exit(0));
+        btnBack.setOnAction(e -> {
+            try {
+                MainMenuScreen mainMenuScreen = new MainMenuScreen();
+                mainMenuScreen.start(stage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
 
         rightPane.getChildren().addAll(title, btnStart, btnEasy, btnNormal, btnHard, btnBack);

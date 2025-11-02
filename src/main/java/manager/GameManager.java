@@ -1,5 +1,6 @@
 package manager;
 
+import Ranking.HighScoreManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,6 +14,7 @@ import java.util.Random;
 
 import level.Level;
 import object.*;
+import screens.MainMenuScreen;
 
 
 import java.util.*;
@@ -29,13 +31,13 @@ public class GameManager {
     private double baseSpeed;
     private double basePaddleWidth;
     private PowerUpManager powerUpManager;
-
     private int score = 0;
     private int lives = 3;
-
+    private int bricks_left = 0;
     private final double width = 700;
     private final double height = 650;
     boolean kiemtra = false;
+    boolean flag = false;
     private boolean gameOver = false;
 
     public int getScore() {
@@ -55,8 +57,8 @@ public class GameManager {
         double brickGap = 10;
         double brickWidth = (width - 9 * brickGap) / 8;
         double brickHeight = 30;
-        Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
-                Color.web("#ffe66d"), Color.web("#9d4edd")};
+//        Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
+//                Color.web("#ffe66d"), Color.web("#9d4edd")};
 
         for (int row = 0; row < levelBricks.length; row++) {
             for (int col = 0; col < levelBricks[row].length; col++) {
@@ -68,6 +70,7 @@ public class GameManager {
                     Color brickColor = brickColors.get(type);
                     if (brickColor == null) {}
                     bricks.add(new Brick(type, x, y, brickWidth, brickHeight));
+                    bricks_left++;
                 }
 //                bricks.add(new Brick(x, y, brickWidth, brickHeight, 1, colors[(row * 6 + col) % colors.length]));
             }
@@ -103,7 +106,15 @@ public class GameManager {
     }
 
     public void update() {
-        if (gameOver) return;
+        if (gameOver) {
+            if (!flag) {
+                int finalScore = score;
+                MainMenuScreen.highScoreManager.addScore(score);
+                MainMenuScreen.highScoreManager.writeToFile();
+                flag = true;
+            }
+            return;
+        }
 
         if (InputManager.isGameStarted()) {
             // bóng bay
@@ -152,6 +163,7 @@ public class GameManager {
                     score += 100;
 
                     if (b.isDestroyed()) {
+                        bricks_left--;
                         powerUpManager.spawn(b.getX() + b.getWidth()/2, b.getY());
                     }
                 }
@@ -174,6 +186,12 @@ public class GameManager {
                 resetBall();;
             }
             else gameOver = true;
+        }
+
+        // hết gạch
+//        System.out.println(bricks.size());
+        if (bricks_left == 0) {
+            gameOver = true;
         }
     }
 

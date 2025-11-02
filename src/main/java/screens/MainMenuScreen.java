@@ -1,5 +1,6 @@
 package screens;
 
+import Ranking.HighScoreManager;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,8 +19,11 @@ import object.Paddle;
 import java.net.URL;
 
 public class MainMenuScreen extends Application {
+    public static HighScoreManager highScoreManager = new HighScoreManager();
+
 
     public void start(Stage stage) {
+        highScoreManager.readFromFile();
         // LEFT: Game Demo
         VBox leftPane = new VBox();
         leftPane.setSpacing(20);
@@ -117,6 +121,4 @@ public class MainMenuScreen extends Application {
         Paddle demoPaddle = new Paddle(120, 200, 60, 10);
         demoPaddle.render(gc);
     }
-
-
 }

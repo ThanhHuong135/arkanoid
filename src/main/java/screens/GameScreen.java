@@ -1,5 +1,6 @@
 package screens;
 
+import Ranking.HighScoreManager;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -8,6 +9,7 @@ import javafx.stage.Stage;
 import manager.GameManager;
 
 public class GameScreen {
+    private static int finalScore;
 
     public static Scene createScene(Stage stage, String levelPath) {
         StackPane root = new StackPane();
@@ -25,6 +27,9 @@ public class GameScreen {
         GameManager gameManager = new GameManager();
         gameManager.setGameLoop(scene, gc, levelPath);
 
+//        finalScore = gameManager.getScore();
+//        MainMenuScreen.highScoreManager.addScore(finalScore);
+//        MainMenuScreen.highScoreManager.writeToFile();
         return scene;
     }
 }
