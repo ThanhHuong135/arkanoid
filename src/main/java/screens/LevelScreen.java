@@ -1,6 +1,5 @@
 package screens;
-import Ranking.HighScoreManager;
-import javafx.application.Application;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -8,36 +7,18 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import object.Ball;
 import object.Paddle;
-import java.net.URL;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 
-public class MainMenuScreen extends Application {
-    public static HighScoreManager highScoreManager = new HighScoreManager();
+import java.util.concurrent.atomic.AtomicReference;
 
+public class LevelScreen {
 
-    public void start(Stage stage) {
-        highScoreManager.readFromFile();
-
-        // === VIDEO BACKGROUND ===
-        URL videoPath = getClass().getResource("/assets/images/background.mp4");
-        Media media = new Media(videoPath.toExternalForm());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.setAutoPlay(true);
-
-        MediaView mediaView = new MediaView(mediaPlayer);
-        mediaView.setFitWidth(800);
-        mediaView.setFitHeight(500);
-        mediaView.setPreserveRatio(false);
+    public static Scene createScene(Stage stage) {
         // LEFT: Game Demo
         VBox leftPane = new VBox();
         leftPane.setSpacing(20);
@@ -51,7 +32,6 @@ public class MainMenuScreen extends Application {
         Label statusLabel = new Label("SCORE: 0    LEVEL: 0    LIVES: ♥ ♥ ♥");
         statusLabel.setTextFill(Color.CYAN);
         statusLabel.setFont(Font.font("Arial", 14));
-
         leftPane.getChildren().addAll(canvas, statusLabel);
 
         // RIGHT: Menu Buttons
@@ -60,61 +40,84 @@ public class MainMenuScreen extends Application {
         rightPane.setAlignment(Pos.CENTER);
         rightPane.getStyleClass().add("right-pane");
 
-        Label title = new Label("ARKANOID");
+        Label title = new Label("LEVEL");
+
         title.getStyleClass().add("title-label");
+
+        AtomicReference<String> levelPath = new AtomicReference<>("level_1.csv");
 
         Button btnStart = createMenuButton("🚀 BẮT ĐẦU CHƠI", "start-btn");
         btnStart.setOnAction(e -> {
             try {
                 // Tạo Scene của GameScreen
-
-//                Scene gameScene = GameScreen.createScene(stage);
-//                stage.setScene(gameScene); // chuyển ngay sang GameScreen
-//                stage.setTitle("Arkanoid - Game");  // set title cho GameScreen
-                Scene levelScreen = LevelScreen.createScene(stage);
-                stage.setScene(levelScreen);
-                stage.setTitle("Arkanoid");
+                Scene gameScene = GameScreen.createScene(stage, levelPath.get());
+                stage.setScene(gameScene); // chuyển ngay sang GameScreen
+                stage.setTitle("Arkanoid");  // set title cho GameScreen
 
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
 
-        Button btnSettings = createMenuButton("⚙ CÀI ĐẶT", "settings-btn");
-        Button btnRanking = createMenuButton("🏆 BẢNG XẾP HẠNG", "ranking-btn");
-        Button btnGuide = createMenuButton("📖 HƯỚNG DẪN", "guide-btn");
-        Button btnExit = createMenuButton("❌ THOÁT", "exit-btn");
-        btnExit.setOnAction(e -> System.exit(0));
+        Button btnEasy = createMenuButton("EASY", "easy-btn");
+        btnEasy.setOnAction(e -> {
+            try  {
+                levelPath.set("level_1.csv");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        Button btnNormal = createMenuButton("NORMAL", "normal-btn");
+        btnNormal.setOnAction(e -> {
+            try {
+                levelPath.set("level_2.csv");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        Button btnHard = createMenuButton("HARD", "hard-btn");
+        btnHard.setOnAction(e -> {
+            try {
+                levelPath.set("level_3.csv");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        Button btnBack = createMenuButton("⬅ QUAY LẠI", "back-btn");
+        btnBack.setOnAction(e -> {
+            try {
+                MainMenuScreen mainMenuScreen = new MainMenuScreen();
+                mainMenuScreen.start(stage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
 
 
-        rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
+        rightPane.getChildren().addAll(title, btnStart, btnEasy, btnNormal, btnHard, btnBack);
 
         // MAIN LAYOUT
-        HBox content = new HBox(80, leftPane, rightPane);
-        //content.getStyleClass().add("root");
-        StackPane root = new StackPane(mediaView, content);
+        HBox root = new HBox(80, leftPane, rightPane);
+        root.getStyleClass().add("root");
 
         Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets().add(
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
         );
-        stage.setScene(scene);
-        stage.setTitle("Arkanoid");
-        stage.show();
+        return scene;
     }
 
-    private Button createMenuButton(String text, String id) {
+    private static Button createMenuButton(String text, String id) {
         Button button = new Button(text);
         button.getStyleClass().add("menu-button");
         button.setId(id);
         return button;
     }
 
-    private void drawDemo(GraphicsContext gc) {
+    private static void drawDemo(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, 300, 250);
 
-        // Draw bricks
         Color[] colors = {
                 Color.web("#ff6b6b"),
                 Color.web("#4ecdc4"),
@@ -128,11 +131,9 @@ public class MainMenuScreen extends Application {
             }
         }
 
-        // Ball
         Ball demoBall = new Ball(150, 120, 5, 0, 0, 0);
         demoBall.render(gc);
 
-        // Paddle
         Paddle demoPaddle = new Paddle(120, 200, 60, 10);
         demoPaddle.render(gc);
     }
