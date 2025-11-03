@@ -16,10 +16,11 @@
 }
 
 .title-label {
+    -fx-font-family: "Orbitron"; /* hoặc Arial Black */
     -fx-font-size: 36px;
+    -fx-text-fill: cyan;
     -fx-font-weight: bold;
-    -fx-text-fill: CYAN;
-    -fx-font-family: "Arial";
+    -fx-effect: dropshadow(gaussian, cyan, 25, 0.4, 0, 0);
 }
 
 .menu-button {
@@ -41,6 +42,29 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 15, 0.5, 0, 6); /* bóng đậm và xa hơn */
 }
 
+/* Nút đóng trong introductionPane */
+.close-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 0 6 0 6;
+}
+
+/* Hiệu ứng khi trỏ chuột vào */
+.close-button:hover {
+    -fx-text-fill: red;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-effect: dropshadow(gaussian, rgba(255,0,0,0.4), 8, 0.5, 0, 0);
+}
+
+/* Khi click (ấn giữ) */
+.close-button:pressed {
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+}
 
 #start-btn {
     -fx-background-color: #ff6b6b;
@@ -59,5 +83,21 @@
 }
 
 #exit-btn {
+    -fx-background-color: #444;
+}
+
+#easy-btn {
+    -fx-background-color: #4ecdc4;
+}
+
+#normal-btn {
+    -fx-background-color: #ffe66d;
+}
+
+#hard-btn {
+    -fx-background-color: #9d4edd;
+}
+
+#back-btn {
     -fx-background-color: #444;
 }

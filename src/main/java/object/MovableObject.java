@@ -26,11 +26,11 @@ public abstract class MovableObject extends GameObject {
         return dy;
     }
 
-    public double setDx(double Dx) {
-        return this.dx = Dx;
+    public void setDx(double Dx) {
+        this.dx = Dx;
     }
 
-    public double setDy(double Dy) {
-        return this.dy = Dy;
+    public void setDy(double Dy) {
+        this.dy = Dy;
     }
 }

@@ -7,18 +7,34 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import object.Ball;
 import object.Paddle;
 
+import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class LevelScreen {
 
     public static Scene createScene(Stage stage) {
+        // === VIDEO BACKGROUND ===
+        URL videoPath = LevelScreen.class.getResource("/assets/images/background.mp4");
+        Media media = new Media(videoPath.toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setAutoPlay(true);
+
+        MediaView mediaView = new MediaView(mediaPlayer);
+        mediaView.setFitWidth(800);
+        mediaView.setFitHeight(500);
+        mediaView.setPreserveRatio(false);
         // LEFT: Game Demo
         VBox leftPane = new VBox();
         leftPane.setSpacing(20);
@@ -40,7 +56,8 @@ public class LevelScreen {
         rightPane.setAlignment(Pos.CENTER);
         rightPane.getStyleClass().add("right-pane");
 
-        Label title = new Label("CHỌN MỨC ĐỘ");
+        Label title = new Label("LEVEL");
+
         title.getStyleClass().add("title-label");
 
         AtomicReference<String> levelPath = new AtomicReference<>("level_1.csv");
@@ -96,9 +113,8 @@ public class LevelScreen {
         rightPane.getChildren().addAll(title, btnStart, btnEasy, btnNormal, btnHard, btnBack);
 
         // MAIN LAYOUT
-        HBox root = new HBox(80, leftPane, rightPane);
-        root.getStyleClass().add("root");
-
+        HBox content = new HBox(80, leftPane, rightPane);
+        StackPane root = new StackPane(mediaView, content);
         Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets().add(
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()

@@ -13,9 +13,10 @@ public class HighScoreManager {
     private static final int numScores = 10;
     private static List<Integer> highScores = new ArrayList<>(numScores);
 
-    public HighScoreManager() {
-        for (int i = 0; i < numScores; i++) highScores.add(0);
-    }
+//    public HighScoreManager() {
+//        for (int i = 0; i < numScores; i++) highScores.add(0);
+//    }
+
 
     public List<Integer> getHighScores() {
         return highScores;
