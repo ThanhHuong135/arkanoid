@@ -27,6 +27,7 @@ public class GameManager {
     private double baseSpeed;
     private double basePaddleWidth;
     private PowerUpManager powerUpManager;
+    private AnimationTimer gameLoop;
 
     private int score = 0;
     private int lives = 3;
@@ -36,6 +37,8 @@ public class GameManager {
     boolean kiemtra = false;
     boolean flag = false;
     private boolean gameOver = false;
+    private boolean paused = false;
+
     public int getScore() {
         return this.score;
     }
@@ -53,7 +56,7 @@ public class GameManager {
         double ballRadius = 10;
         double ballX = paddle.getX() + paddle.getWidth() / 2;
         double ballY = paddle.getY() - ballRadius - 1; // đặt sát trên paddle 1px
-        double ballSpeed = 3;
+        double ballSpeed = 3.5;
 
         ball = new Ball(ballX, ballY, ballRadius, ballSpeed, 1, -1, true);
         baseSpeed = ball.getSpeed();
@@ -160,6 +163,7 @@ public class GameManager {
             // 2. Va chạm với paddle
             if (ball.checkCollision(paddle) && ball.getDy() > 0) {
                 ball.bounceOffPaddle(paddle);
+                SoundManager.playHitSound();
             }
 
             // 3. Va chạm với gạch
@@ -168,7 +172,7 @@ public class GameManager {
                     ball.bounceOff(b);
                     b.takeHit();
                     score += 100;
-
+                    SoundManager.playHitSound();
                     if (b.isDestroyed()) {
                         bricks_left--;
                         powerUpManager.spawn(b.getX() + b.getWidth()/2, b.getY());
@@ -185,15 +189,20 @@ public class GameManager {
 
         // bóng rơi ra khỏi màn hình
         if (ball.getY() > height) {
+            SoundManager.playGameOverSound();
             lives--;
             InputManager.waitForRestart();
             kiemtra = false;
             ball.clearTrail();
 
             if (lives > 0) {
-                resetBall();;
+                resetBall();
+                resetPaddle();
+                powerUpManager.reset();
             }
-            else gameOver = true;
+            else {
+                gameOver = true;
+            }
         }
 
         // hết gạch
@@ -211,21 +220,45 @@ public class GameManager {
         ball.setSpeed(baseSpeed);
     }
 
+    private void resetPaddle() {
+        paddle.setWidth(basePaddleWidth);
+        double paddleX = (width - basePaddleWidth) / 2;
+        double paddleY = height - paddle.getHeight() - 30;
+        paddle.setX(paddleX);
+        paddle.setY(paddleY);
+    }
+
     public void setGameOver(boolean value) {
         this.gameOver = value;
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
 
     public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath) {
         init(levelPath);
         InputManager.attach(scene, paddle, ball, this);
 
-        new AnimationTimer() {
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
-                render(gc);
+                if (!paused) {  // không pause thì update
+                    update();
+                    render(gc);
+                }
             }
-        }.start();
+        };
+        gameLoop.start();
+    }
+
+    public void pauseGame() {
+        paused = true;
+        powerUpManager.pauseEffects();
+    }
+
+    public void resumeGame() {
+        paused = false;
+        powerUpManager.resumeEffects();
     }
 }

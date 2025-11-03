@@ -1,5 +1,6 @@
 package manager;
 
+import animation.BlinkingEffect;
 import javafx.animation.PauseTransition;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -27,6 +28,8 @@ public class PowerUpManager {
     private PauseTransition paddleTimer;
     private GameManager gameManager;
 
+    private BlinkingEffect effect = new BlinkingEffect();
+
     public PowerUpManager(GameManager gameManager, Ball ball, Paddle paddle, double baseSpeed, double basePaddleWidth) {
         this.gameManager = gameManager;
         this.ball = ball;
@@ -38,14 +41,12 @@ public class PowerUpManager {
     public void spawn(double x, double y) {
         Random r = new Random();
 
-        // Xác suất rơi PowerUp tổng
-        if (r.nextInt(100) < 30) {  // 30% tổng số gạch rơi PowerUp
+        if (r.nextInt(100) < 40) {
             int roll = r.nextInt(100);
             String type;
-            if (roll < 40) type = "DEATH";           // 40%
-            else if (roll < 60) type = "BIG_PADDLE"; // 20%
-            else if (roll < 80) type = "FAST_BALL";  // 20%
-            else if (roll < 90) type = "SLOW_BALL";  // 10%
+            if (roll < 30) type = "DEATH";
+            else if (roll < 50) type = "BIG_PADDLE";
+            else if (roll < 80) type = "FAST_BALL";
             else type = "SMALL_PADDLE";
             powerUps.add(new PowerUp(x, y, type));
         }
@@ -56,13 +57,13 @@ public class PowerUpManager {
         for (PowerUp p : powerUps) {
             p.update();
 
-            // Paddle ăn PowerUp
             if (p.checkCollision(paddle) && p.isActive()) {
+                SoundManager.playHitSound();
                 applyPowerUp(p);
                 toRemove.add(p);
             }
             // PowerUp rơi khỏi màn hình
-            else if (p.getY() > 650) { // height của màn hình
+            else if (p.getY() > 650) { // height màn hình
                 toRemove.add(p);
             }
         }
@@ -80,7 +81,7 @@ public class PowerUpManager {
 
         switch (type) {
             case "FAST_BALL":
-                ball.setSpeed(ball.getSpeed() * 5);
+                ball.setSpeed(ball.getSpeed() * 1.5);
 
                 if (ballTimer != null) ballTimer.stop();
                 ballTimer = new PauseTransition(Duration.seconds(10));
@@ -90,19 +91,7 @@ public class PowerUpManager {
                 });
                 ballTimer.play();
 
-                applyBlinkingEffect(ball, Color.DEEPSKYBLUE, Color.AQUA, 10, 3);
-                break;
-
-            case "SLOW_BALL":
-                ball.setSpeed(baseSpeed * 0.25);
-
-                if (ballTimer != null) ballTimer.stop();
-                ballTimer = new PauseTransition(Duration.seconds(10));
-                ballTimer.setOnFinished(e -> {
-                    ball.setSpeed(baseSpeed);
-                });
-                ballTimer.play();
-                applyBlinkingEffect(ball, Color.LIGHTGREEN, Color.AQUA, 10, 3);
+                effect.applyBlinkingEffect(ball, Color.DEEPSKYBLUE, Color.AQUA, 10, 3);
                 break;
 
             case "DEATH":
@@ -121,7 +110,6 @@ public class PowerUpManager {
 
             case "SMALL_PADDLE":
                 paddle.setWidth(basePaddleWidth * 0.7);
-                //paddle.setColor(Color.YELLOW);
                 if (paddleTimer != null) paddleTimer.stop();
                 paddleTimer = new PauseTransition(Duration.seconds(10));
                 paddleTimer.setOnFinished(e -> {
@@ -131,43 +119,37 @@ public class PowerUpManager {
                 break;
 
             default:
-                // Nếu có loại mới trong tương lai
+                //
                 break;
         }
         p.deactivate();
     }
+    public void reset() {
+        powerUps.clear();
 
-    private void applyBlinkingEffect(Object target, Color activeColor, Color originalColor, double duration, double blinkDuration) {
-        //Màu ăn PowerUp
-        setColor(target, activeColor);
-
-        //Timeline nhấp nháy 3s cuối
-        double interval = 0.25; // nhấp nháy mỗi 0.25s
-        int totalBlinkFrames = (int) (blinkDuration / interval);
-
-        Timeline blink = new Timeline();
-        for (int i = 0; i < totalBlinkFrames; i++) {
-            int frame = i;
-            blink.getKeyFrames().add(new KeyFrame(Duration.seconds(frame * interval), e -> {
-                // Nhấp nháy: màu powerUp và màu gốc
-                if (frame % 2 == 0) setColor(target, activeColor);
-                else setColor(target, originalColor);
-            }));
+        // Dừng timer và reset trạng thái
+        if (ballTimer != null) {
+            ballTimer.stop();
+            ball.setSpeed(baseSpeed);
         }
 
-        // Delay trước khi nhấp nháy
-        PauseTransition delay = new PauseTransition(Duration.seconds(duration - blinkDuration));
-        delay.setOnFinished(e -> blink.play());
-        delay.play();
+        if (paddleTimer != null) {
+            paddleTimer.stop();
+            paddle.setWidth(basePaddleWidth);
+        }
 
-        // Khi PowerUp hết → reset màu về gốc
-        PauseTransition end = new PauseTransition(Duration.seconds(duration));
-        end.setOnFinished(e -> setColor(target, originalColor));
-        end.play();
+        effect.stop();
+        ball.setColor(Color.AQUA);
     }
 
-    private void setColor(Object target, Color color) {
-        ((Ball) target).setColor(color);
+    public void pauseEffects() {
+        if (ballTimer != null) ballTimer.pause();
+        if (paddleTimer != null) paddleTimer.pause();
+    }
+
+    public void resumeEffects() {
+        if (ballTimer != null) ballTimer.play();
+        if (paddleTimer != null) paddleTimer.play();
     }
 
 }

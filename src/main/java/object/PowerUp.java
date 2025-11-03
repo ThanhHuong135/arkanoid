@@ -29,7 +29,6 @@ public class PowerUp {
         switch (type) {
             case "FAST_BALL" -> color = Color.DEEPSKYBLUE;
             case "BIG_PADDLE" -> color = Color.ORANGE;
-            case "SLOW_BALL" -> color = Color.LIGHTGREEN;
             case "SMALL_PADDLE" -> color = Color.YELLOW;
             case "DEATH" -> color = Color.DARKRED;
             default -> color = Color.WHITE;
