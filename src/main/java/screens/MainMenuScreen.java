@@ -80,7 +80,6 @@ public class MainMenuScreen extends Application {
 
 
         rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
-
         // MAIN LAYOUT
         HBox content = new HBox(80, leftPane, rightPane);
         //content.getStyleClass().add("root");
