@@ -1,9 +1,11 @@
 package manager;
 
+import animation.ItemFast;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import animation.ItemDeath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class GameManager {
     private double baseSpeed; // tốc độ gốc của bóng
     private double basePaddleWidth; // chiều rộng gốc của paddle
     private boolean explodePaddle = true;
+    private ItemDeath itemDeath = new ItemDeath();
+    private ItemFast itemFast = new ItemFast();
 
     public void init() {
         // Tạo paddle ở giữa, cách đáy 50px
@@ -110,8 +114,8 @@ public class GameManager {
         gc.setFill(Color.WHITE);
         gc.fillText("Score: " + score, 20, 25);
         gc.fillText("Lives: " + lives, width - 100, 25);
-        paddle.renderExplosion(gc);
-        paddle.renderBlink(gc);
+        itemDeath.render(gc);
+        itemFast.render(gc,paddle.getX(), paddle.getY(), paddle.getWidth(), paddle.getHeight() );
     }
 
     public void startGame() {
@@ -197,11 +201,11 @@ public class GameManager {
                 if(p.getType() == "DEATH") {
                     double cx = p.getX() + p.getWidthDeath() / 2;       // chính giữa theo ngang
                     double cy = p.getY() + p.getHeightDeath();          // đáy item → chạm paddle
-                    paddle.explode(cx, cy);  // nổ tại vị trí chạm
+                    itemDeath.death(cx, cy);  // nổ tại vị trí chạm
                     explodePaddle = false;
                 }
                 else {
-                  paddle.triggerSpeedBlink();
+                  itemFast.fast();
                 }
 
                 toRemove.add(p); // đánh dấu để xóa sau
