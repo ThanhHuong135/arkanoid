@@ -60,7 +60,7 @@ public class GameManager {
         double ballRadius = 10;
         double ballX = paddle.getX() + paddle.getWidth() / 2;
         double ballY = paddle.getY() - ballRadius - 1; // đặt sát trên paddle 1px
-        double ballSpeed = 1.5;
+        double ballSpeed = 3.5;
 
         ball = new Ball(ballX, ballY, ballRadius, ballSpeed, 1, -1, true);
 

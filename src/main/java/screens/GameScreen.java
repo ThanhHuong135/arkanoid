@@ -1,49 +1,57 @@
 package screens;
-import Ranking.HighScoreManager;
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import manager.GameManager;
-import javafx.geometry.Pos;
-import javafx.geometry.Insets;
 
-import manager.SoundManager;
+import java.net.URL;
 
 public class GameScreen {
     private static int finalScore;
+
     public static Scene createScene(Stage stage, String levelPath) {
-        // --- Background ImageView ---
-        Image bgImage = new Image(GameScreen.class.getResourceAsStream("/assets/images/background-game-screen.png"));
-        ImageView bgView = new ImageView(bgImage);
-        bgView.setFitWidth(700);
-        bgView.setFitHeight(650);
-        bgView.setPreserveRatio(false);
-        bgView.setSmooth(false);
+        // === VIDEO BACKGROUND ===
+        URL videoPath = GameScreen.class.getResource("/assets/images/background.mp4");
+        Media media = new Media(videoPath.toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.setAutoPlay(true);
 
-        // --- Canvas để vẽ các object ---
+        MediaView mediaView = new MediaView(mediaPlayer);
+        mediaView.setPreserveRatio(false);
+
+        // === Canvas ===
         Canvas canvas = new Canvas(700, 650);
-        // canvas mặc định trong suốt → background nhìn thấy
 
-        // --- StackPane chứa background và canvas ---
-        StackPane root = new StackPane(bgView, canvas);
-
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
+        // === Layout chính ===
+        StackPane root = new StackPane(mediaView, canvas);
         Scene scene = new Scene(root, 700, 650);
         scene.getStylesheets().add(
                 MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
         );
 
-        // --- Game loop ---
+        // === Ràng buộc kích thước ===
+        mediaView.fitWidthProperty().bind(scene.widthProperty());
+        mediaView.fitHeightProperty().bind(scene.heightProperty());
+        canvas.widthProperty().bind(scene.widthProperty());
+        canvas.heightProperty().bind(scene.heightProperty());
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        // === Game loop ===
         GameManager gameManager = new GameManager();
         gameManager.setGameLoop(scene, gc, levelPath);
 
-        // --- Pause / Resume button ---
+        // === Nút Pause ===
         Button btnPause = new Button("⏸ Pause");
         btnPause.setFocusTraversable(false);
         btnPause.setStyle("-fx-font-size: 16px; -fx-background-color: rgba(0,0,0,0.5); -fx-text-fill: white;");
@@ -58,13 +66,9 @@ public class GameScreen {
         });
 
         root.getChildren().add(btnPause);
-
         StackPane.setAlignment(btnPause, Pos.TOP_RIGHT);
-        StackPane.setMargin(btnPause, new Insets(10)); // cách viền 10px
+        StackPane.setMargin(btnPause, new Insets(10));
 
-//        finalScore = gameManager.getScore();
-//        MainMenuScreen.highScoreManager.addScore(finalScore);
-//        MainMenuScreen.highScoreManager.writeToFile();
         return scene;
     }
 }

@@ -42,7 +42,7 @@ public class PowerUpManager {
     public void spawn(double x, double y) {
         Random r = new Random();
 
-        if (r.nextInt(100) < 100) {
+        if (r.nextInt(100) < 50) {
             int roll = r.nextInt(100);
             String type;
             if (roll < 30) type = "DEATH";
