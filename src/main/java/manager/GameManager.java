@@ -1,21 +1,20 @@
 package manager;
 
+import Ranking.HighScoreManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import level.Level;
 import object.*;
-
-
+import screens.MainMenuScreen;
 import java.util.*;
-
-
 public class GameManager {
 
     private Ball ball;
@@ -24,21 +23,22 @@ public class GameManager {
     private List<Brick> bricks;
     private BrickType[][] levelBricks;
     private Map<BrickType, Color> brickColors = new HashMap<>();
-
-
-    private List<PowerUp> powerUps;
-
+    private double baseSpeed;
+    private double basePaddleWidth;
+    private PowerUpManager powerUpManager;
     private int score = 0;
     private int lives = 3;
-
+    private int bricks_left = 0;
     private final double width = 700;
     private final double height = 650;
     boolean kiemtra = false;
+    boolean flag = false;
     private boolean gameOver = false;
-    private double baseSpeed; // tốc độ gốc của bóng
-    private double basePaddleWidth; // chiều rộng gốc của paddle
+    public int getScore() {
+        return this.score;
+    }
 
-    public void init() {
+    public void init(String levelPath) {
         // Tạo paddle ở giữa, cách đáy 50px
         double paddleWidth = 120;
         double paddleHeight = 30;
@@ -55,18 +55,17 @@ public class GameManager {
 
         ball = new Ball(ballX, ballY, ballRadius, ballSpeed, 1, -1, true);
         baseSpeed = ball.getSpeed();
+        basePaddleWidth = paddle.getWidth();
 
-        powerUps = new ArrayList<>();
+        powerUpManager = new PowerUpManager(this, ball, paddle, baseSpeed, basePaddleWidth);
 
-
-        levelBricks = Level.load("level_1.csv");
-
+        levelBricks = Level.load(levelPath);
         bricks = new ArrayList<>();
         double brickGap = 3;
         double brickWidth = (width - 9 * brickGap) / 8;
         double brickHeight = 30;
-        Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
-                Color.web("#ffe66d"), Color.web("#9d4edd")};
+//        Color[] colors = {Color.web("#ff6b6b"), Color.web("#4ecdc4"),
+//                Color.web("#ffe66d"), Color.web("#9d4edd")};
 
         for (int row = 0; row < levelBricks.length; row++) {
             for (int col = 0; col < levelBricks[row].length; col++) {
@@ -78,9 +77,11 @@ public class GameManager {
                     Color brickColor = brickColors.get(type);
                     if (brickColor == null) {}
                     bricks.add(new Brick(type, x, y, brickWidth, brickHeight));
+                    bricks_left++;
                 }
 //                bricks.add(new Brick(x, y, brickWidth, brickHeight, 1, colors[(row * 6 + col) % colors.length]));
             }
+
         }
     }
 
@@ -96,10 +97,8 @@ public class GameManager {
         paddle.render(gc);
         ball.render(gc);
 
-        // power-ups
-        for (PowerUp p : powerUps) {
-            p.render(gc);
-        }
+        powerUpManager.render(gc);
+
 
         // score & lives
         gc.setFill(Color.WHITE);
@@ -112,7 +111,15 @@ public class GameManager {
     }
 
     public void update() {
-        if (gameOver) return;
+        if (gameOver) {
+            if (!flag) {
+                int finalScore = score;
+                MainMenuScreen.highScoreManager.addScore(score);
+                MainMenuScreen.highScoreManager.writeToFile();
+                flag = true;
+            }
+            return;
+        }
 
         if (InputManager.isGameStarted()) {
             // bóng bay
@@ -161,13 +168,8 @@ public class GameManager {
                     score += 100;
 
                     if (b.isDestroyed()) {
-                        Random r = new Random();
-                        int chance = r.nextInt(100);
-                        if (chance < 30) {
-                            String[] types = {"FAST_BALL", "DEATH"};
-                            String type = types[r.nextInt(types.length)];
-                            powerUps.add(new PowerUp(b.getX() + b.getWidth() / 2, b.getY(), type));
-                        }
+                        bricks_left--;
+                        powerUpManager.spawn(b.getX() + b.getWidth()/2, b.getY());
                     }
                     break;
                 }
@@ -177,25 +179,7 @@ public class GameManager {
             ball.update();
         }
 
-
-
-        List<PowerUp> toRemove = new ArrayList<>();
-        for (PowerUp p : powerUps) {
-            p.update();
-
-            // Nếu paddle hứng được power-up
-            if (p.checkCollision(paddle)) {
-                applyPowerUp(p);
-                toRemove.add(p); // đánh dấu để xóa sau
-            }
-            // Nếu power-up rơi khỏi màn hình
-            else if (p.getY() > height) {
-                toRemove.add(p);
-            }
-        }
-
-        // Xóa các power-up đã dùng hoặc rơi khỏi màn hình
-        powerUps.removeAll(toRemove);
+        //powerUpManager.update();
 
         // bóng rơi ra khỏi màn hình
         if (ball.getY() > height) {
@@ -209,6 +193,12 @@ public class GameManager {
             }
             else gameOver = true;
         }
+
+        // hết gạch
+//        System.out.println(bricks.size());
+        if (bricks_left == 0) {
+            gameOver = true;
+        }
     }
 
     private void resetBall() {
@@ -219,34 +209,21 @@ public class GameManager {
         ball.setSpeed(baseSpeed);
     }
 
-
-    private void applyPowerUp(PowerUp p) {
-        String type = p.getType();
-
-        switch (type) {
-            case "FAST_BALL":
-                ball.setSpeed(ball.getSpeed() * 1.3);
-                break;
-            case "DEATH":
-                gameOver = true;
-                break;
-            default:
-                // Nếu có loại mới trong tương lai
-                break;
-        }
+    public void setGameOver(boolean value) {
+        this.gameOver = value;
     }
 
 
-    public void setGameLoop(Scene scene, GraphicsContext gc) {
-            init();
-            InputManager.attach(scene, paddle, ball, this);
+    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath) {
+        init(levelPath);
+        InputManager.attach(scene, paddle, ball, this);
 
-            new AnimationTimer() {
-                @Override
-                public void handle(long now) {
-                    update();
-                    render(gc);
-                }
-            }.start();
-        }
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                update();
+                render(gc);
+            }
+        }.start();
+    }
 }

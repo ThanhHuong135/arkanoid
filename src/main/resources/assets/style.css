@@ -62,3 +62,19 @@
 #exit-btn {
     -fx-background-color: #444;
 }
+
+#easy-btn {
+    -fx-background-color: #4ecdc4;
+}
+
+#normal-btn {
+    -fx-background-color: #ffe66d;
+}
+
+#hard-btn {
+    -fx-background-color: #9d4edd;
+}
+
+#back-btn {
+    -fx-background-color: #444;
+}

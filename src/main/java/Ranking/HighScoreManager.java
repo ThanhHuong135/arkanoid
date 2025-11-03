@@ -17,6 +17,7 @@ public class HighScoreManager {
 //        for (int i = 0; i < numScores; i++) highScores.add(0);
 //    }
 
+
     public List<Integer> getHighScores() {
         return highScores;
     }

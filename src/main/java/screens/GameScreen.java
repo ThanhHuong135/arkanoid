@@ -1,5 +1,5 @@
 package screens;
-
+import Ranking.HighScoreManager;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -10,8 +10,8 @@ import javafx.stage.Stage;
 import manager.GameManager;
 
 public class GameScreen {
-
-    public static Scene createScene(Stage stage) {
+    private static int finalScore;
+    public static Scene createScene(Stage stage, String levelPath) {
         // --- Background ImageView ---
         Image bgImage = new Image(GameScreen.class.getResourceAsStream("/assets/images/background-game-screen.png"));
         ImageView bgView = new ImageView(bgImage);
@@ -36,8 +36,11 @@ public class GameScreen {
 
         // --- Game loop ---
         GameManager gameManager = new GameManager();
-        gameManager.setGameLoop(scene, gc);
+        gameManager.setGameLoop(scene, gc, levelPath);
 
+//        finalScore = gameManager.getScore();
+//        MainMenuScreen.highScoreManager.addScore(finalScore);
+//        MainMenuScreen.highScoreManager.writeToFile();
         return scene;
     }
 }
