@@ -47,9 +47,20 @@ public class GameScreen {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        // === Overlay EndGame ===
+        StackPane endGameOverlay = EndGameScreen.createOverlay(stage, levelPath);
+
+        // đảm bảo overlay phủ toàn bộ màn hình GameScreen
+        endGameOverlay.setVisible(false);
+        endGameOverlay.setStyle("-fx-background-color: rgba(0,0,0,0.6);");
+
+        // thêm overlay sau cùng để nằm trên cùng
+        root.getChildren().add(endGameOverlay);
+        StackPane.setAlignment(endGameOverlay, Pos.CENTER);
+
         // === Game loop ===
         GameManager gameManager = new GameManager();
-        gameManager.setGameLoop(scene, gc, levelPath);
+        gameManager.setGameLoop(scene, gc, levelPath, endGameOverlay);
 
         // === Nút Pause ===
         Button btnPause = new Button("⏸ Pause");

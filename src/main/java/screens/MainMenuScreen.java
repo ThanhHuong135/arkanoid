@@ -71,7 +71,7 @@ public class MainMenuScreen extends Application {
 
         HBox content = new HBox(80, leftPane, rightPane);
 
-        Button btnStart = createMenuButton("🚀 BẮT ĐẦU CHƠI", "start-btn");
+        Button btnStart = createMenuButton("🚀 START GAME", "start-btn");
         btnStart.setOnAction(e -> {
             try {
                 // Tạo Scene của GameScreen
@@ -88,9 +88,9 @@ public class MainMenuScreen extends Application {
             }
         });
 
-        Button btnSettings = createMenuButton("⚙ CÀI ĐẶT", "settings-btn");
-        Button btnRanking = createMenuButton("🏆 BẢNG XẾP HẠNG", "ranking-btn");
-        Button btnGuide = createMenuButton("📖 HƯỚNG DẪN", "guide-btn");
+        Button btnSettings = createMenuButton("⚙ SETTING", "settings-btn");
+        Button btnRanking = createMenuButton("🏆 RANKING", "ranking-btn");
+        Button btnGuide = createMenuButton("📖 GUIDE", "guide-btn");
 
         //Create Introduction
 
@@ -203,7 +203,7 @@ public class MainMenuScreen extends Application {
             fadeBgBack.play();
         });
 
-        Button btnExit = createMenuButton("❌ THOÁT", "exit-btn");
+        Button btnExit = createMenuButton("❌ EXIT   ", "exit-btn");
         btnExit.setOnAction(e -> System.exit(0));
 
         rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);

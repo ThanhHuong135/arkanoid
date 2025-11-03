@@ -5,9 +5,12 @@ import Ranking.HighScoreManager;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import animation.ItemDeath;
 import javafx.animation.PauseTransition;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -114,7 +117,15 @@ public class GameManager {
 
 
         // score & lives
-        gc.setFill(Color.WHITE);
+        gc.setFont(Font.font("Consolas", FontWeight.BOLD, 22));
+
+        // Đổ bóng nhẹ
+        gc.setFill(Color.color(0, 0, 0, 0.6));
+        gc.fillText("Score: " + score, 23, 28);
+        gc.fillText("Lives: " + lives, width - 97, 28);
+
+        // Chữ chính màu sáng
+        gc.setFill(Color.web("#4FC3F7"));
         gc.fillText("Score: " + score, 20, 25);
         gc.fillText("Lives: " + lives, width - 100, 25);
         itemDeath.render(gc);
@@ -276,7 +287,7 @@ public class GameManager {
     }
 
 
-    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath) {
+    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath, StackPane endGameOverlay) {
         init(levelPath);
         InputManager.attach(scene, paddle, ball, this);
 
@@ -286,6 +297,10 @@ public class GameManager {
                 if (!paused) {  // không pause thì update
                     update();
                     render(gc);
+                }
+                if (gameOver) {
+                    endGameOverlay.setVisible(true);
+                    return; // dừng game loop
                 }
             }
         };

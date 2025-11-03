@@ -62,7 +62,7 @@ public class LevelScreen {
 
         AtomicReference<String> levelPath = new AtomicReference<>("level_1.csv");
 
-        Button btnStart = createMenuButton("🚀 BẮT ĐẦU CHƠI", "start-btn");
+        Button btnStart = createMenuButton("🚀 START GAME", "start-btn");
         btnStart.setOnAction(e -> {
             try {
                 // Tạo Scene của GameScreen
@@ -99,7 +99,7 @@ public class LevelScreen {
                 ex.printStackTrace();
             }
         });
-        Button btnBack = createMenuButton("⬅ QUAY LẠI", "back-btn");
+        Button btnBack = createMenuButton("⬅ BACK", "back-btn");
         btnBack.setOnAction(e -> {
             try {
                 MainMenuScreen mainMenuScreen = new MainMenuScreen();
