@@ -23,9 +23,11 @@ public class GameManager {
     private List<Brick> bricks;
     private BrickType[][] levelBricks;
     private Map<BrickType, Color> brickColors = new HashMap<>();
+
     private double baseSpeed;
     private double basePaddleWidth;
     private PowerUpManager powerUpManager;
+
     private int score = 0;
     private int lives = 3;
     private int bricks_left = 0;
@@ -179,7 +181,7 @@ public class GameManager {
             ball.update();
         }
 
-        //powerUpManager.update();
+        powerUpManager.update();
 
         // bóng rơi ra khỏi màn hình
         if (ball.getY() > height) {

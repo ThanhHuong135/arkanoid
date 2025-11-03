@@ -51,7 +51,7 @@ public class PowerUpManager {
         }
     }
 
-    /*public void update() {
+    public void update() {
         List<PowerUp> toRemove = new ArrayList<>();
         for (PowerUp p : powerUps) {
             p.update();
@@ -67,7 +67,7 @@ public class PowerUpManager {
             }
         }
         powerUps.removeAll(toRemove);
-    }*/
+    }
 
     public void render(GraphicsContext gc) {
         for (PowerUp p : powerUps) {
@@ -75,7 +75,7 @@ public class PowerUpManager {
         }
     }
 
-    /*private void applyPowerUp(PowerUp p) {
+    private void applyPowerUp(PowerUp p) {
         String type = p.getType();
 
         switch (type) {
@@ -84,11 +84,9 @@ public class PowerUpManager {
 
                 if (ballTimer != null) ballTimer.stop();
                 ballTimer = new PauseTransition(Duration.seconds(10));
-                //startBlinking(ball, Color.DEEPSKYBLUE, Color.AQUA, 10, 7);
 
                 ballTimer.setOnFinished(e -> {
                     ball.setSpeed(baseSpeed);
-                    //ball.setColor(Color.AQUA);
                 });
                 ballTimer.play();
 
@@ -102,7 +100,6 @@ public class PowerUpManager {
                 ballTimer = new PauseTransition(Duration.seconds(10));
                 ballTimer.setOnFinished(e -> {
                     ball.setSpeed(baseSpeed);
-                    //ball.setColor(Color.AQUA);
                 });
                 ballTimer.play();
                 applyBlinkingEffect(ball, Color.LIGHTGREEN, Color.AQUA, 10, 3);
@@ -120,19 +117,17 @@ public class PowerUpManager {
                 paddleTimer = new PauseTransition(Duration.seconds(10));
                 paddleTimer.setOnFinished(e -> paddle.setWidth(basePaddleWidth));
                 paddleTimer.play();
-                applyBlinkingEffect(paddle, Color.YELLOW,Color.ORANGE,  10, 3);
                 break;
 
             case "SMALL_PADDLE":
                 paddle.setWidth(basePaddleWidth * 0.7);
-                paddle.setColor(Color.YELLOW);
+                //paddle.setColor(Color.YELLOW);
                 if (paddleTimer != null) paddleTimer.stop();
                 paddleTimer = new PauseTransition(Duration.seconds(10));
                 paddleTimer.setOnFinished(e -> {
                     paddle.setWidth(basePaddleWidth);
                 });
                 paddleTimer.play();
-                applyBlinkingEffect(paddle, Color.YELLOW,Color.ORANGE, 10, 3);
                 break;
 
             default:
@@ -140,9 +135,9 @@ public class PowerUpManager {
                 break;
         }
         p.deactivate();
-    }*/
+    }
 
-    /*private void applyBlinkingEffect(Object target, Color activeColor, Color originalColor, double duration, double blinkDuration) {
+    private void applyBlinkingEffect(Object target, Color activeColor, Color originalColor, double duration, double blinkDuration) {
         //Màu ăn PowerUp
         setColor(target, activeColor);
 
@@ -169,11 +164,10 @@ public class PowerUpManager {
         PauseTransition end = new PauseTransition(Duration.seconds(duration));
         end.setOnFinished(e -> setColor(target, originalColor));
         end.play();
-    }*/
+    }
 
-    /*private void setColor(Object target, Color color) {
-        if (target instanceof Ball) ((Ball) target).setColor(color);
-        else if (target instanceof Paddle) ((Paddle) target).setColor(color);
-    }*/
+    private void setColor(Object target, Color color) {
+        ((Ball) target).setColor(color);
+    }
 
 }
