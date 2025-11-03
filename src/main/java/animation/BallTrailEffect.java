@@ -73,4 +73,8 @@ public class BallTrailEffect {
     public void clear() {
         trailPoints.clear();
     }
+
+    public boolean isEmpty() {
+        return trailPoints.isEmpty();
+    }
 }

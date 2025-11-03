@@ -39,7 +39,22 @@ public class Ball extends MovableObject {
     }
 
     public void setSpeed(double speed) {
+        double length = Math.sqrt(dx * dx + dy * dy);
+        if (length != 0) {
+            dx = dx / length * speed;
+            dy = dy / length * speed;
+        }
         this.speed = speed;
+    }
+
+    private Color color = Color.AQUA;
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public void render(GraphicsContext gc) {
@@ -48,7 +63,7 @@ public class Ball extends MovableObject {
             trailEffect.render(gc);
         }
         // Vẽ bóng
-        gc.setFill(Color.AQUA);
+        gc.setFill(color);
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
@@ -59,10 +74,11 @@ public class Ball extends MovableObject {
 
     @Override
     public void update() {
-        if (trailEffect != null) {
+        if (trailEffect != null && (dx != 0 || dy != 0)) {
             trailEffect.addPosition(x, y);
-            trailEffect.update();   // cập nhật alpha điểm cũ
+            trailEffect.update();
         }
+
         move(); // di chuyển bóng
     }
 
@@ -72,38 +88,32 @@ public class Ball extends MovableObject {
         }
     }
 
+    public BallTrailEffect getTrailEffect() {
+        return trailEffect;
+    }
+
     public void bounceOff(GameObject other) {
-        /*if (x + radius > other.getX() && x - radius < other.getX() + other.getWidth()) {
-            dy *= -1;
-        } else {
-            dx *= -1;
-        }*/
-        double speed = Math.sqrt(dx * dx + dy * dy);
+        double speed = this.speed;
 
-        double objCenterX = other.getX() + other.getWidth() / 2;
-        double objCenterY = other.getY() + other.getHeight() / 2;
+        // Tính vị trí chạm (0 ở mép trái, 1 ở mép phải)
+        double hitPos = (x - other.getX()) / other.getWidth();
+        hitPos = Math.max(0, Math.min(1, hitPos)); // đảm bảo trong [0,1]
+        // Góc nảy từ -60° (trái) đến +60° (phải)
+        double angle = Math.toRadians(-60 + 120 * hitPos);
 
-        double diffX = x - objCenterX;
-        double diffY = y - objCenterY;
-
-        if (Math.abs(diffX) > Math.abs(diffY)) {
-            dx = -dx; // va chạm ngang
-        } else {
-            dy = -dy; // va chạm dọc
-        }
-
-        // Giữ tốc độ
-        double currentSpeed = Math.sqrt(dx * dx + dy * dy);
-        dx = dx / currentSpeed * speed;
-        dy = dy / currentSpeed * speed;
+        // Cập nhật vận tốc theo góc
+        dx = speed * Math.sin(angle);
+        dy = -speed * Math.cos(angle); // âm vì bóng bật lên
+        if(other.y < y) dy = speed * Math.cos(angle);
     }
 
     public void bounceOffPaddle(GameObject paddle) {
-        double speed = 3.5;
+        double speed = this.speed;
 
         // Tính vị trí chạm (0 ở mép trái, 1 ở mép phải)
         double hitPos = (x - paddle.getX()) / paddle.getWidth();
         hitPos = Math.max(0, Math.min(1, hitPos)); // đảm bảo trong [0,1]
+        // Góc nảy từ -60° (trái) đến +60° (phải)
         double angle = Math.toRadians(-60 + 120 * hitPos);
 
         // Cập nhật vận tốc theo góc
