@@ -39,7 +39,22 @@ public class Ball extends MovableObject {
     }
 
     public void setSpeed(double speed) {
+        double length = Math.sqrt(dx * dx + dy * dy);
+        if (length != 0) {
+            dx = dx / length * speed;
+            dy = dy / length * speed;
+        }
         this.speed = speed;
+    }
+
+    private Color color = Color.AQUA;
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     public void render(GraphicsContext gc) {
@@ -48,7 +63,7 @@ public class Ball extends MovableObject {
             trailEffect.render(gc);
         }
         // Vẽ bóng
-        gc.setFill(Color.AQUA);
+        gc.setFill(color);
         gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
     }
 
@@ -78,7 +93,7 @@ public class Ball extends MovableObject {
     }
 
     public void bounceOff(GameObject other) {
-        double speed = 1.5;
+        double speed = this.speed;
 
         // Tính vị trí chạm (0 ở mép trái, 1 ở mép phải)
         double hitPos = (x - other.getX()) / other.getWidth();
@@ -93,7 +108,7 @@ public class Ball extends MovableObject {
     }
 
     public void bounceOffPaddle(GameObject paddle) {
-        double speed = 1.5;
+        double speed = this.speed;
 
         // Tính vị trí chạm (0 ở mép trái, 1 ở mép phải)
         double hitPos = (x - paddle.getX()) / paddle.getWidth();

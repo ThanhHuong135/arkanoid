@@ -17,16 +17,25 @@ public class InputManager {
                 switch (event.getCode()) {
                     case LEFT -> paddle.setGoLeft(true);
                     case RIGHT -> paddle.setGoRight(true);
+
                     case SPACE -> {
                         if (!gameStarted || waitingForRestart) {
                             gameStarted = true;
                             waitingForRestart = false;
 
                             double speed = ball.getSpeed();
-                            double angle = Math.toRadians(-45 + Math.random() * 90); // -45° → 45°
+                            double angle = Math.toRadians(Math.random() < 0.5 ? -45 : 45);
                             ball.setDx(speed * Math.sin(angle));
                             ball.setDy(-speed * Math.cos(angle)); // âm vì bóng đi lên
                             gm.startGame();
+                        }
+                    }
+
+                    case P -> {  // ← phím Pause/Resume
+                        if (gm.isPaused()) {
+                            gm.resumeGame();
+                        } else {
+                            gm.pauseGame();
                         }
                     }
                 }

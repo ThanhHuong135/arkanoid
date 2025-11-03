@@ -38,6 +38,14 @@ public class Paddle extends MovableObject {
         loadImage();
     }
 
+    public double getWidth() {
+        return super.getWidth();
+    }
+
+    public void setWidth(double newWidth) {
+        this.width = newWidth;
+    }
+
     public Paddle(double x, double y, double width, double height) {
         super(x, y, width, height);
         loadImage();
@@ -52,6 +60,13 @@ public class Paddle extends MovableObject {
        if(this.getX() + this.getWidth() < sceneWidth)
            setX(getX() + 5);// không ra ngoài phải
 
+    }
+
+    public void increaseWidth(){
+        this.width *= 1.1;
+        if (this.width > 400) {
+            this.width = 400;
+        }
     }
 
     @Override

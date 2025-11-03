@@ -22,6 +22,17 @@ public class PowerUp {
     private double widthFast = 300 * 0.1;
     private double heightFast = 512 * 0.1;
 
+    private static final Image SMALL_IMAGE =
+            new Image(PowerUp.class.getResource("/assets/item/narrow.png").toExternalForm());
+    private double widthSmall = 491 * 0.12;
+    private double heightSmall = 221 * 0.12;
+
+    private static final Image BIG_IMAGE =
+            new Image(PowerUp.class.getResource("/assets/item/resize.png").toExternalForm());
+    private double widthBig = 279 * 0.25;
+    private double heightBig = 105 * 0.25;
+
+
     public PowerUp(double x, double y, String type) {
         this.x = x;
         this.y = y;
@@ -39,6 +50,13 @@ public class PowerUp {
             case "DEATH" ->
                     gc.drawImage(DEATH_IMAGE, x, y, widthDeath, heightDeath);
 
+            case "BIG_PADDLE" -> {
+                gc.drawImage(BIG_IMAGE, x, y, widthBig, heightBig);
+            }
+            case "SMALL_PADDLE" -> {
+                gc.drawImage(SMALL_IMAGE, x, y, widthSmall, heightSmall);
+            }
+
             case "FAST_BALL" ->
                     gc.drawImage(FAST_IMAGE, x, y, widthFast, heightFast);
 
@@ -48,6 +66,7 @@ public class PowerUp {
             }
         }
     }
+
 
     public boolean checkCollision(Paddle paddle) {
         if (!active) return false;
@@ -62,6 +81,14 @@ public class PowerUp {
             case "FAST_BALL" -> {
                 pw = widthFast;
                 ph = heightFast;
+            }
+            case "SMALL_PADDLE" -> {
+                pw = widthSmall;
+                ph = heightFast;
+            }
+            case "BIG_PADDLE" -> {
+                pw = widthBig;
+                ph = heightBig;
             }
             default -> {
                 pw = widthFast; // mặc định
@@ -107,4 +134,5 @@ public class PowerUp {
     public void deactivate() {
         active = false;
     }
+
 }
