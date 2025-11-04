@@ -101,37 +101,37 @@ public class GameManager {
 
     public void render(GraphicsContext gc) {
         gc.clearRect(0, 0, width, height);
+
         // bricks
         for (Brick b : bricks) {
             b.update();
             b.render(gc);
         }
 
+        // Hiệu ứng nổ
+        itemDeath.render(gc);
+
         // paddle & ball
-        if(explodePaddle == true){
-        paddle.render(gc);
+        if (explodePaddle) {
+            paddle.render(gc);
+        } else if (itemDeath.isDone()) {  // <— thêm dòng này
+            explodePaddle = true;         // paddle hiện lại sau khi nổ xong
         }
 
         ball.render(gc);
-
         powerUpManager.render(gc);
-
+        itemFast.render(gc, paddle.getX(), paddle.getY(), paddle.getWidth(), paddle.getHeight());
 
         // score & lives
         gc.setFont(Font.font("Consolas", FontWeight.BOLD, 22));
-
-        // Đổ bóng nhẹ
         gc.setFill(Color.color(0, 0, 0, 0.6));
         gc.fillText("Score: " + score, 23, 28);
         gc.fillText("Lives: " + lives, width - 97, 28);
-
-        // Chữ chính màu sáng
         gc.setFill(Color.web("#4FC3F7"));
         gc.fillText("Score: " + score, 20, 25);
         gc.fillText("Lives: " + lives, width - 100, 25);
-        itemDeath.render(gc);
-        itemFast.render(gc,paddle.getX(), paddle.getY(), paddle.getWidth(), paddle.getHeight() );
     }
+
 
     public void startGame() {
         kiemtra = true;
@@ -216,9 +216,9 @@ public class GameManager {
             // Nếu paddle hứng được power-up
             if (p.checkCollision(paddle)) {
                 powerUpManager.applyPowerUp(p);
-                if(p.getType() == "DEATH") {
+                if (p.getType().equals("DEATH")) {
                     double cx = p.getX() + p.getWidthDeath() / 2;       // chính giữa theo ngang
-                    double cy = p.getY() + p.getHeightDeath();          // đáy item → chạm paddle
+                    double cy = p.getY() + p.getHeightDeath();          // đáy item → chạm paddl
                     itemDeath.death(cx, cy);  // nổ tại vị trí chạm
                     explodePaddle = false;
                 }
@@ -288,7 +288,7 @@ public class GameManager {
     }
 
 
-    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath, StackPane endGameOverlay, VBox pauseMenu) {
+    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath, VBox endGameMenu, VBox pauseMenu) {
         init(levelPath);
         InputManager.attach(scene, paddle, ball, this, pauseMenu);
 
@@ -302,9 +302,15 @@ public class GameManager {
                 if (gameOver) {
                     if (!flag) {
                         SoundManager.playGameOverSound();
-                        endGameOverlay.setVisible(true);
-                        gameLoop.stop();
+                        endGameMenu.setVisible(true);
+                        //gameLoop.stop();
                         flag = true;
+                    }
+                    // Chỉ dừng gameLoop sau khi hiệu ứng nổ đã chạy hết
+                    if (itemDeath.isDone()) {
+                        gameLoop.stop();
+                    } else {
+                        render(gc); // vẫn render để hiển thị hiệu ứng nổ
                     }
                     return;
                 }

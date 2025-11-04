@@ -26,13 +26,7 @@ public class PauseGameScreen {
         Button btnMainMenu = new Button("🏠 Main Menu");
 
         for (Button b : new Button[]{btnResume, btnRestart, btnMainMenu}) {
-            b.setStyle("""
-                    -fx-font-size: 18px;
-                    -fx-min-width: 150px;
-                    -fx-background-color: rgba(255,255,255,0.2);
-                    -fx-text-fill: white;
-                    -fx-background-radius: 10;
-                    """);
+            b.getStyleClass().add("game-button");
         }
 
         menuBox.getChildren().addAll(btnResume, btnRestart, btnMainMenu);

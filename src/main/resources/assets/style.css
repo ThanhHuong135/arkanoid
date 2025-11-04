@@ -102,22 +102,27 @@
     -fx-background-color: #444;
 }
 
-.endgame-button {
-    -fx-font-size: 18px;
-    -fx-background-color: rgba(255,255,255,0.25);
-    -fx-text-fill: white;
-    -fx-padding: 10 30 10 30;
+.game-button {
+    -fx-background-color: rgba(255, 255, 255, 0.08);
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-border-radius: 12;
     -fx-background-radius: 12;
-    -fx-cursor: hand;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 10 25 10 25;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.2), 8, 0.4, 0, 0);
+    -fx-transition: all 0.3s ease;
 }
 
-.endgame-menu {
-    -fx-background-color: rgba(30, 30, 30, 0.8);
+.game-button:hover {
+    -fx-background-color: rgba(0, 255, 255, 0.25);
+    -fx-effect: dropshadow(gaussian, rgba(0,255,255,0.5), 15, 0.6, 0, 0);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+.game-menu {
+    -fx-background-color: rgba(255,255,255,0.08);
     -fx-background-radius: 20;
-    -fx-border-color: rgba(255,255,255,0.4);
-    -fx-border-width: 2;
-    -fx-border-radius: 20;
-    -fx-padding: 15;
-    -fx-spacing: 20;
-    -fx-alignment: center;
+    -fx-padding: 20;
 }

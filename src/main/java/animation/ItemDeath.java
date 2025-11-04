@@ -37,4 +37,8 @@ public class ItemDeath {
             if (p[4] <= 0) it.remove();
         }
     }
+
+    public boolean isDone() {
+        return explosion.isEmpty();
+    }
 }

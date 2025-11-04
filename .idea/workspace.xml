@@ -5,13 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ae02aa4-db0f-4d27-bb46-1f08c7b6c499" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/screens/EndGameScreen.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/screens/SettingScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HighScores.txt" beforeDir="false" afterPath="$PROJECT_DIR$/HighScores.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/animation/ItemDeath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/animation/ItemDeath.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/screens/EndGameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/EndGameScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/screens/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/screens/LevelScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/LevelScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/screens/PauseGameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/PauseGameScreen.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -141,15 +142,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="TestNG">
-      <option name="TEST_OBJECT" value="CLASS" />
-      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="Application" factoryName="Application">
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2" />
@@ -211,6 +203,15 @@
     <configuration default="true" type="JUnit" factoryName="JUnit">
       <option name="TEST_OBJECT" value="class" />
       <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
