@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import animation.ItemDeath;
 import javafx.animation.PauseTransition;
@@ -287,9 +288,9 @@ public class GameManager {
     }
 
 
-    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath, StackPane endGameOverlay) {
+    public void setGameLoop(Scene scene, GraphicsContext gc, String levelPath, StackPane endGameOverlay, VBox pauseMenu) {
         init(levelPath);
-        InputManager.attach(scene, paddle, ball, this);
+        InputManager.attach(scene, paddle, ball, this, pauseMenu);
 
         gameLoop = new AnimationTimer() {
             @Override
@@ -299,13 +300,19 @@ public class GameManager {
                     render(gc);
                 }
                 if (gameOver) {
-                    endGameOverlay.setVisible(true);
-                    return; // dừng game loop
+                    if (!flag) {
+                        SoundManager.playGameOverSound();
+                        endGameOverlay.setVisible(true);
+                        gameLoop.stop();
+                        flag = true;
+                    }
+                    return;
                 }
             }
         };
         gameLoop.start();
     }
+
 
     public void pauseGame() {
         paused = true;

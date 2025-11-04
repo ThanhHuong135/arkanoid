@@ -11,7 +11,7 @@ public class SoundManager {
     }
 
     public static void playGameOverSound() {
-        new MediaPlayer(new Media(SoundManager.class.getResource("/assets/sound/game-over.mp3").toString())).play();
+        new MediaPlayer(new Media(SoundManager.class.getResource("/assets/sound/game_over.mp3").toString())).play();
     }
 
 }

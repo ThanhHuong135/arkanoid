@@ -63,7 +63,7 @@ public class Paddle extends MovableObject {
     }
 
     public void increaseWidth(){
-        this.width *= 1.1;
+        this.width *= 1.3;
         if (this.width > 400) {
             this.width = 400;
         }

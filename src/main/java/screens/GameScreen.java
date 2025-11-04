@@ -1,5 +1,5 @@
 package screens;
-
+import javafx.scene.layout.VBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,6 +12,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import manager.GameManager;
+import manager.InputManager;
 
 import java.net.URL;
 
@@ -49,6 +50,8 @@ public class GameScreen {
 
         // === Overlay EndGame ===
         StackPane endGameOverlay = EndGameScreen.createOverlay(stage, levelPath);
+        GameManager gameManager = new GameManager();
+        InputManager inputManager = new InputManager();
 
         // đảm bảo overlay phủ toàn bộ màn hình GameScreen
         endGameOverlay.setVisible(false);
@@ -58,28 +61,13 @@ public class GameScreen {
         root.getChildren().add(endGameOverlay);
         StackPane.setAlignment(endGameOverlay, Pos.CENTER);
 
+        // === PauseGame ===
+        VBox pauseMenu = PauseGameScreen.createMenu(stage, gameManager, inputManager, levelPath);
+        root.getChildren().add(pauseMenu);
+        StackPane.setAlignment(pauseMenu, Pos.CENTER);
         // === Game loop ===
-        GameManager gameManager = new GameManager();
-        gameManager.setGameLoop(scene, gc, levelPath, endGameOverlay);
 
-        // === Nút Pause ===
-        Button btnPause = new Button("⏸ Pause");
-        btnPause.setFocusTraversable(false);
-        btnPause.setStyle("-fx-font-size: 16px; -fx-background-color: rgba(0,0,0,0.5); -fx-text-fill: white;");
-        btnPause.setOnAction(e -> {
-            if (btnPause.getText().equals("⏸ Pause")) {
-                gameManager.pauseGame();
-                btnPause.setText("▶ Resume");
-            } else {
-                gameManager.resumeGame();
-                btnPause.setText("⏸ Pause");
-            }
-        });
-
-        root.getChildren().add(btnPause);
-        StackPane.setAlignment(btnPause, Pos.TOP_RIGHT);
-        StackPane.setMargin(btnPause, new Insets(10));
-
+        gameManager.setGameLoop(scene, gc, levelPath, endGameOverlay, pauseMenu);
         return scene;
     }
 }

@@ -1,5 +1,6 @@
 package manager;
 
+import javafx.scene.layout.VBox;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
@@ -10,7 +11,7 @@ public class InputManager {
     private static boolean gameStarted = false; // Đã bấm Space chưa
     private static boolean waitingForRestart = false; // Đang đợi bấm Space sau khi chết
 
-    public static void attach(Scene scene, Paddle paddle, Ball ball, GameManager gm) {
+    public static void attach(Scene scene, Paddle paddle, Ball ball, GameManager gm, VBox pauseMenu) {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -34,8 +35,10 @@ public class InputManager {
                     case P -> {  // ← phím Pause/Resume
                         if (gm.isPaused()) {
                             gm.resumeGame();
+                            pauseMenu.setVisible(false);
                         } else {
                             gm.pauseGame();
+                            pauseMenu.setVisible(true);
                         }
                     }
                 }
@@ -55,6 +58,10 @@ public class InputManager {
 
     public static boolean isGameStarted() {
         return gameStarted;
+    }
+
+    public static void setGameStarted(boolean gameStarted) {
+        InputManager.gameStarted = gameStarted;
     }
 
     public static void waitForRestart() {
