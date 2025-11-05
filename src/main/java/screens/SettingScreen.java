@@ -46,11 +46,18 @@ public class SettingScreen extends StackPane {
         // --- Volume slider ---
         Label volLabel = new Label("Volume");
         volLabel.setTextFill(Color.web("#e9f5ec"));
-        Slider volumeSlider = new Slider(0, 1, 0.5);
-        volumeSlider.setShowTickLabels(true);
-        volumeSlider.setShowTickMarks(true);
-        volumeSlider.setMajorTickUnit(0.25);
-        volumeSlider.setBlockIncrement(0.1);
+
+        // Slider từ 0 → 1
+        Slider volumeSlider = new Slider(0, 1, SettingsState.getVolume());
+
+        // Hiển thị tick marks và nhãn
+        volumeSlider.setShowTickMarks(true);   // hiển thị vạch
+        volumeSlider.setShowTickLabels(true);  // hiển thị số
+        volumeSlider.setMajorTickUnit(0.25);    // mỗi 0.1 sẽ có nhãn số
+        volumeSlider.setMinorTickCount(0);     // không hiển thị tick nhỏ hơn
+        volumeSlider.setBlockIncrement(0.01);  // bước chỉnh khi kéo
+        volumeSlider.setSnapToTicks(true);     // snap về tick gần nhất
+        volumeSlider.valueProperty().addListener((obs, oldV, newV) -> SettingsState.setVolume(newV.doubleValue()));
 
         volumeSlider.valueProperty().addListener((obs, oldV, newV) -> {
             SoundManager.setVolume(newV.doubleValue());
@@ -59,11 +66,8 @@ public class SettingScreen extends StackPane {
         // --- Mute toggle ---
         CheckBox muteBox = new CheckBox("Mute all sounds");
         muteBox.setTextFill(Color.web("#e9f5ec"));
+        muteBox.setSelected(SoundManager.isMuted()); // <-- quan trọng: set theo trạng thái hiện tại
         muteBox.setOnAction(e -> SoundManager.setMute(muteBox.isSelected()));
-
-        /*// --- Option khác ---
-        CheckBox retroBox = new CheckBox("Retro visual mode");
-        retroBox.setTextFill(Color.web("#e9f5ec"));*/
 
         // --- Nút Close ---
         Button btnClose = new Button("✖");
@@ -128,5 +132,16 @@ public class SettingScreen extends StackPane {
         fadeBgBack.setFromValue(0.4);
         fadeBgBack.setToValue(1);
         fadeBgBack.play();
+    }
+
+    public class SettingsState {
+        private static double volume = 0.5;
+        private static boolean mute = false;
+
+        public static double getVolume() { return volume; }
+        public static void setVolume(double v) { volume = Math.max(0, Math.min(1, v)); SoundManager.setVolume(volume); }
+
+        public static boolean isMute() { return mute; }
+        public static void setMute(boolean m) { mute = m; SoundManager.setMute(m); }
     }
 }
