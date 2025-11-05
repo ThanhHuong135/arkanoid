@@ -22,6 +22,8 @@ import javafx.util.Duration;
 import object.Ball;
 import object.Paddle;
 import java.net.URL;
+import java.util.List;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -133,10 +135,14 @@ public class MainMenuScreen extends Application {
         topBar.setPadding(new Insets(5, 10, 0, 0));
 
         introductionPane.getChildren().addAll(topBar, heading, bodyLabel);
+
         StackPane overlay = new StackPane();
         overlay.setStyle("-fx-background-color: rgba(0,0,0,0.6);"); // làm tối nền
         overlay.setVisible(false); // ẩn ban đầu
-        overlay.getChildren().add(introductionPane);
+
+        //Create Ranking
+        VBox highScorePane = createHighScorePane(overlay, content);
+        overlay.getChildren().addAll(introductionPane, highScorePane);
 
         // Khi bấm “Hướng dẫn”
         btnGuide.setOnAction(e -> {
@@ -206,6 +212,34 @@ public class MainMenuScreen extends Application {
         Button btnExit = createMenuButton("❌ EXIT   ", "exit-btn");
         btnExit.setOnAction(e -> System.exit(0));
 
+        btnRanking.setOnAction(e -> {
+            overlay.setVisible(true);
+            VBox pane = highScorePane;
+            pane.setVisible(true);
+
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(400), pane);
+            slideIn.setFromY(30);
+            slideIn.setToY(0);
+
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(400), pane);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
+            javafx.animation.ScaleTransition scaleIn = new javafx.animation.ScaleTransition(Duration.millis(400), pane);
+            scaleIn.setFromX(0.9);
+            scaleIn.setFromY(0.9);
+            scaleIn.setToX(1.0);
+            scaleIn.setToY(1.0);
+
+            javafx.animation.ParallelTransition show = new javafx.animation.ParallelTransition(slideIn, fadeIn, scaleIn);
+            show.play();
+
+            FadeTransition fadeBg = new FadeTransition(Duration.millis(400), content);
+            fadeBg.setFromValue(1);
+            fadeBg.setToValue(0.4);
+            fadeBg.play();
+        });
+
         rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
 
         // MAIN LAYOUT
@@ -232,6 +266,142 @@ public class MainMenuScreen extends Application {
         button.getStyleClass().add("menu-button");
         button.setId(id);
         return button;
+    }
+
+    private VBox createHighScorePane(StackPane overlay, HBox content) {
+        //Heading
+        Label heading = new Label("\uD83C\uDFC6 HIGH SCORES");
+        heading.setTextFill(Color.web("#b7e4c7"));
+        heading.setFont(Font.font("Consolas", FontWeight.BOLD, 20));
+        heading.setEffect(new DropShadow(12, Color.web("#52b788", 0.35)));
+
+        //CloseButton
+        Button closeBtn = new Button("✖");
+        closeBtn.getStyleClass().add("close-button");
+
+        HBox topBar = new HBox(closeBtn);
+        topBar.setAlignment(Pos.TOP_RIGHT);
+        topBar.setPadding(new Insets(5, 10, 0, 0));
+
+        //Get data highscores
+//        GridPane scoreGrid = new GridPane();
+//        scoreGrid.setHgap(40);  // khoảng cách ngang giữa các cột
+//        scoreGrid.setVgap(10);  // khoảng cách dọc giữa các hàng
+//        scoreGrid.setAlignment(Pos.CENTER);
+
+        // Lấy danh sách điểm cho từng mức
+        List<Integer> easyScores = MainMenuScreen.highScoreManager.getHighScoresEasy();
+        List<Integer> mediumScores = MainMenuScreen.highScoreManager.getHighScoresMedium();
+        List<Integer> hardScores = MainMenuScreen.highScoreManager.getHighScoresHard();
+
+        VBox easyColumn = createScoreColumn("EASY", easyScores, "#b7e4c7");
+        VBox mediumColumn = createScoreColumn("MEDIUM", mediumScores, "#ffe66d");
+        VBox hardColumn = createScoreColumn("HARD", hardScores, "#ff6b6b");
+
+//        Label easyTitle = new Label("EASY" );
+//        Label mediumTitle = new Label("MEDIUM");
+//        Label hardTitle = new Label("HARD");
+
+//        for (Label label : new Label[]{easyTitle, mediumTitle, hardTitle}) {
+//            label.setFont(Font.font("Consolas", FontWeight.BOLD, 17));
+//            label.setTextFill(Color.web("#b7e4c7"));
+//        }
+
+        HBox scoreGrid = new HBox(40, easyColumn, mediumColumn, hardColumn);
+        scoreGrid.setAlignment(Pos.CENTER);
+
+//        scoreGrid.add(easyTitle, 0, 0);
+//        scoreGrid.add(mediumTitle, 1, 0);
+//        scoreGrid.add(hardTitle, 2, 0);
+//
+//        // Thêm các dòng điểm
+//        for (int i = 0; i < maxRows; i++) {
+//            if (i < easyScores.size()) {
+//                Label score = new Label("• " + easyScores.get(i));
+//                score.setFont(Font.font("Consolas", 14));
+//                score.setTextFill(Color.web("#e9f5ec"));
+//                scoreGrid.add(score, 0, i + 1);
+//            }
+//            if (i < mediumScores.size()) {
+//                Label score = new Label("• " + mediumScores.get(i));
+//                score.setFont(Font.font("Consolas", 14));
+//                score.setTextFill(Color.web("#e9f5ec"));
+//                scoreGrid.add(score, 1, i + 1);
+//            }
+//            if (i < hardScores.size()) {
+//                Label score = new Label("• " + hardScores.get(i));
+//                score.setFont(Font.font("Consolas", 14));
+//                score.setTextFill(Color.web("#e9f5ec"));
+//                scoreGrid.add(score, 2, i + 1);
+//            }
+//        }
+
+        // --- Bảng hiển thị ---
+        VBox pane = new VBox(12);
+        pane.setAlignment(Pos.CENTER);
+        pane.setPadding(new Insets(20, 16, 24, 16));
+        pane.setMaxWidth(360);
+        pane.setMaxHeight(300);
+        pane.setBackground(new Background(new BackgroundFill(Color.web("#ffffff", 0.06), new CornerRadii(12), Insets.EMPTY)));
+        pane.setBorder(new Border(new BorderStroke(Color.web("#95d5b2", 0.35), BorderStrokeStyle.SOLID, new CornerRadii(12), new BorderWidths(1))));
+        pane.setEffect(new DropShadow(20, Color.web("#000000", 0.35)));
+        pane.setVisible(false);
+        pane.setOpacity(0);
+        pane.setTranslateY(30);
+        pane.setScaleX(0.9);
+        pane.setScaleY(0.9);
+
+        pane.getChildren().addAll(topBar, heading, scoreGrid);
+
+        // --- Nút đóng ---
+        closeBtn.setOnAction(e -> {
+            TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), pane);
+            slideOut.setFromY(0);
+            slideOut.setToY(30);
+
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(300), pane);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+
+            javafx.animation.ScaleTransition scaleOut = new javafx.animation.ScaleTransition(Duration.millis(300), pane);
+            scaleOut.setFromX(1.0);
+            scaleOut.setFromY(1.0);
+            scaleOut.setToX(0.9);
+            scaleOut.setToY(0.9);
+
+            javafx.animation.ParallelTransition hide = new javafx.animation.ParallelTransition(slideOut, fadeOut, scaleOut);
+            hide.setOnFinished(ev -> {
+                overlay.setVisible(false);
+                pane.setVisible(false);
+            });
+            hide.play();
+
+            FadeTransition fadeBgBack = new FadeTransition(Duration.millis(300), content);
+            fadeBgBack.setFromValue(0.4);
+            fadeBgBack.setToValue(1);
+            fadeBgBack.play();
+        });
+
+        return pane;
+    }
+
+    private VBox createScoreColumn(String title, List<Integer> scores, String colorHex) {
+        Label titleLabel = new Label(title);
+        titleLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 16));
+        titleLabel.setTextFill(Color.web(colorHex));
+
+        VBox column = new VBox(6);
+        column.setAlignment(Pos.TOP_CENTER);
+        column.getChildren().add(titleLabel);
+
+        for (int i = 0; i < scores.size(); i++) {
+            Label scoreLabel = new Label(String.format("%2d. %d", i + 1, scores.get(i)));
+            scoreLabel.setFont(Font.font("Consolas", 14));
+            scoreLabel.setTextFill(Color.web("#e9f5ec"));
+            column.getChildren().add(scoreLabel);
+        }
+
+        return column;
     }
 
     private void drawDemo(GraphicsContext gc) {
