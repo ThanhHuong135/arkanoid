@@ -102,6 +102,15 @@
     -fx-background-color: #444;
 }
 
+.selected-button {
+    -fx-border-color: cyan;
+    -fx-border-width: 3;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, cyan, 15, 0.6, 0, 0);
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+}
+
 .game-button {
     -fx-background-color: rgba(255, 255, 255, 0.08);
     -fx-border-color: rgba(255, 255, 255, 0.3);
