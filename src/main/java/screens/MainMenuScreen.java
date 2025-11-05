@@ -207,9 +207,16 @@ public class MainMenuScreen extends Application {
         btnExit.setOnAction(e -> System.exit(0));
 
         rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
+
         // MAIN LAYOUT
-        //content.getStyleClass().add("root");
         StackPane root = new StackPane(mediaView, content, overlay);
+
+        // Tạo SettingScreen
+        SettingScreen settingScreen = new SettingScreen(content);
+        // Thêm cả VBox menu và SettingScreen vào StackPane
+        root.getChildren().add(settingScreen);
+        // Nút Settings chỉ cần gọi show
+        btnSettings.setOnAction(e -> settingScreen.show(content));
 
         Scene scene = new Scene(root, 800, 500);
         scene.getStylesheets().add(

@@ -5,15 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ae02aa4-db0f-4d27-bb46-1f08c7b6c499" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/screens/SettingScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/animation/ItemDeath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/animation/ItemDeath.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/manager/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/screens/EndGameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/EndGameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/screens/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/GameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/screens/PauseGameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/PauseGameScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/assets/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/assets/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/manager/SoundManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/manager/SoundManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/MainMenuScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/screens/SettingScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/screens/SettingScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
