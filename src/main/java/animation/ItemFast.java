@@ -12,9 +12,10 @@ import java.util.List;
 
 public class ItemFast  {
     private List<double[]> explosion = new ArrayList<>();
-
+    private boolean active = false;
 
     public void fast(String type) {
+        this.active = true;
         double lifetime = 600; // thời gian tồn tại hiệu ứng (frame)
 
         switch (type) {
@@ -39,26 +40,32 @@ public class ItemFast  {
 
 
     public void render(GraphicsContext gc, double x, double y, double width, double height) {
-        for (Iterator<double[]> it = explosion.iterator(); it.hasNext();) {
-            double[] p = it.next();
+        if (active != true) return;
+        else {
+            for (Iterator<double[]> it = explosion.iterator(); it.hasNext(); ) {
+                double[] p = it.next();
 
-            p[4]--;
-            if (p[4] <= 0) {
-                it.remove();
-                continue;
+                p[4]--;
+                if (p[4] <= 0) {
+                    it.remove();
+                    continue;
+                }
+
+                double alpha = 0.6 + 0.4 * Math.sin(System.currentTimeMillis() * 0.02);
+                gc.setGlobalAlpha(alpha);
+
+                // Lấy màu RGB từ mảng (p[5], p[6], p[7])
+                gc.setStroke(Color.color(p[5], p[6], p[7]));
+                gc.setLineWidth(4);
+                gc.strokeRoundRect(x - 3, y - 3, width + 6, height + 6, 25, 25);
+
+                gc.setGlobalAlpha(1.0);
             }
-
-            double alpha = 0.6 + 0.4 * Math.sin(System.currentTimeMillis() * 0.02);
-            gc.setGlobalAlpha(alpha);
-
-            // Lấy màu RGB từ mảng (p[5], p[6], p[7])
-            gc.setStroke(Color.color(p[5], p[6], p[7]));
-            gc.setLineWidth(4);
-            gc.strokeRoundRect(x - 3, y - 3, width + 6, height + 6, 25, 25);
-
-            gc.setGlobalAlpha(1.0);
         }
     }
 
+    public void check() {
+        this.active = false;
+    }
 
 }

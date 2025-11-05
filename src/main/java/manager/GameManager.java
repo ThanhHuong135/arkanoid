@@ -238,6 +238,7 @@ public class GameManager {
                 resetBall();
                 resetPaddle();
                 powerUpManager.reset();
+                itemFast.check();
             }
             else {
                 gameOver = true;
