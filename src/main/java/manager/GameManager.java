@@ -47,6 +47,7 @@ public class GameManager {
     private ItemDeath itemDeath = new ItemDeath();
     private ItemFast itemFast = new ItemFast();
     private boolean paused = false;
+
     public int getScore() {
         return this.score;
     }
@@ -141,8 +142,8 @@ public class GameManager {
         if (gameOver) {
             if (!flag) {
                 int finalScore = score;
-                MainMenuScreen.highScoreManager.addScore(score);
-                MainMenuScreen.highScoreManager.writeToFile();
+//                MainMenuScreen.highScoreManager.addScore(score, MainMenuScreen.highScoreManager.getChosenDifficulty());
+//                MainMenuScreen.highScoreManager.writeToFile();
                 flag = true;
             }
             return;

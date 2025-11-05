@@ -46,6 +46,7 @@ public class MainMenuScreen extends Application {
         mediaView.setFitWidth(800);
         mediaView.setFitHeight(500);
         mediaView.setPreserveRatio(false);
+
         // LEFT: Game Demo
         VBox leftPane = new VBox();
         leftPane.setSpacing(20);
@@ -93,48 +94,11 @@ public class MainMenuScreen extends Application {
         Button btnSettings = createMenuButton("⚙ SETTING", "settings-btn");
         Button btnRanking = createMenuButton("🏆 RANKING", "ranking-btn");
         Button btnGuide = createMenuButton("📖 GUIDE", "guide-btn");
-
-        //Create Introduction
-
-        //Heading
-        Label heading = new Label("How to play");
-        heading.setTextFill(Color.web("#b7e4c7"));
-        heading.setFont(Font.font("Consolas", FontWeight.BOLD, 20));
-        heading.setEffect(new DropShadow(12, Color.web("#52b788", 0.35)));
-
-        //BodyText
-        Label bodyLabel = new Label("• Move the paddle with ← → keys\n" +
-                "• Press SPACE to launch the ball\n" +
-                "• Break all bricks to win\n" +
-                "• Don’t let the ball fall below");
-        bodyLabel.setFont(Font.font("Consolas", 14));
-        bodyLabel.setWrapText(true);
-        bodyLabel.setTextFill(Color.web("#e9f5ec"));
-        bodyLabel.setStyle("-fx-font-size: 15px; -fx-line-spacing: 4px;");
-
-        VBox introductionPane = new VBox(12);
-        introductionPane.setAlignment(Pos.CENTER);
-        introductionPane.setPadding(new Insets(20, 16, 24, 16));
-        introductionPane.setMaxWidth(300);
-        introductionPane.setMaxHeight(240);
-        introductionPane.setBackground(new Background(new BackgroundFill(Color.web("#ffffff", 0.06), new CornerRadii(12), Insets.EMPTY)));
-        introductionPane.setBorder(new Border(new BorderStroke(Color.web("#95d5b2", 0.35), BorderStrokeStyle.SOLID, new CornerRadii(12), new BorderWidths(1))));
-        introductionPane.setEffect(new DropShadow(20, Color.web("#000000", 0.35)));
-        introductionPane.setVisible(false);
-        introductionPane.setOpacity(0);
-        introductionPane.setTranslateY(30);
-        introductionPane.setScaleX(0.9);
-        introductionPane.setScaleY(0.9);
-
-        // Nút X đóng
-        Button closeGuide = new Button("✖");
-        closeGuide.getStyleClass().add("close-button");
-
-        HBox topBar = new HBox(closeGuide);
-        topBar.setAlignment(Pos.TOP_RIGHT);
-        topBar.setPadding(new Insets(5, 10, 0, 0));
-
-        introductionPane.getChildren().addAll(topBar, heading, bodyLabel);
+        Button btnExit = createMenuButton("❌ EXIT   ", "exit-btn");
+        btnExit.setOnAction(e -> {
+            highScoreManager.writeToFile();
+            System.exit(0);
+        });
 
         StackPane overlay = new StackPane();
         overlay.setStyle("-fx-background-color: rgba(0,0,0,0.6);"); // làm tối nền
@@ -142,6 +106,7 @@ public class MainMenuScreen extends Application {
 
         //Create Ranking
         VBox highScorePane = createHighScorePane(overlay, content);
+        VBox introductionPane = createIntroductionPane(overlay, content);
         overlay.getChildren().addAll(introductionPane, highScorePane);
 
         // Khi bấm “Hướng dẫn”
@@ -175,42 +140,6 @@ public class MainMenuScreen extends Application {
             fadeBg.setToValue(0.4);
             fadeBg.play();
         });
-
-        // Khi bấm “Đóng”
-        closeGuide.setOnAction(e -> {
-            // --- Trượt xuống ---
-            TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), introductionPane);
-            slideOut.setFromY(0);
-            slideOut.setToY(30);
-
-            // --- Mờ dần ---
-            FadeTransition fadeOut = new FadeTransition(Duration.millis(300), introductionPane);
-            fadeOut.setFromValue(1);
-            fadeOut.setToValue(0);
-
-            // --- Thu nhỏ nhẹ ---
-            javafx.animation.ScaleTransition scaleOut = new javafx.animation.ScaleTransition(Duration.millis(300), introductionPane);
-            scaleOut.setFromX(1.0);
-            scaleOut.setFromY(1.0);
-            scaleOut.setToX(0.9);
-            scaleOut.setToY(0.9);
-
-            // --- Gộp 3 hiệu ứng ---
-            javafx.animation.ParallelTransition hide = new javafx.animation.ParallelTransition(slideOut, fadeOut, scaleOut);
-            hide.setOnFinished(ev -> {
-                overlay.setVisible(false);
-                introductionPane.setVisible(false);
-            });
-            hide.play();
-
-            FadeTransition fadeBgBack = new FadeTransition(Duration.millis(300), content);
-            fadeBgBack.setFromValue(0.4);
-            fadeBgBack.setToValue(1);
-            fadeBgBack.play();
-        });
-
-        Button btnExit = createMenuButton("❌ EXIT   ", "exit-btn");
-        btnExit.setOnAction(e -> System.exit(0));
 
         btnRanking.setOnAction(e -> {
             overlay.setVisible(true);
@@ -268,6 +197,83 @@ public class MainMenuScreen extends Application {
         return button;
     }
 
+    private VBox createIntroductionPane(StackPane overlay, HBox content) {
+        //Heading
+        Label heading = new Label("How to play");
+        heading.setTextFill(Color.web("#b7e4c7"));
+        heading.setFont(Font.font("Consolas", FontWeight.BOLD, 20));
+        heading.setEffect(new DropShadow(12, Color.web("#52b788", 0.35)));
+
+        //BodyText
+        Label bodyLabel = new Label("• Move the paddle with ← → keys\n" +
+                "• Press SPACE to launch the ball\n" +
+                "• Break all bricks to win\n" +
+                "• Don’t let the ball fall below");
+        bodyLabel.setFont(Font.font("Consolas", 14));
+        bodyLabel.setWrapText(true);
+        bodyLabel.setTextFill(Color.web("#e9f5ec"));
+        bodyLabel.setStyle("-fx-font-size: 15px; -fx-line-spacing: 4px;");
+
+        VBox introductionPane = new VBox(12);
+        introductionPane.setAlignment(Pos.CENTER);
+        introductionPane.setPadding(new Insets(20, 16, 24, 16));
+        introductionPane.setMaxWidth(300);
+        introductionPane.setMaxHeight(240);
+        introductionPane.setBackground(new Background(new BackgroundFill(Color.web("#ffffff", 0.06), new CornerRadii(12), Insets.EMPTY)));
+        introductionPane.setBorder(new Border(new BorderStroke(Color.web("#95d5b2", 0.35), BorderStrokeStyle.SOLID, new CornerRadii(12), new BorderWidths(1))));
+        introductionPane.setEffect(new DropShadow(20, Color.web("#000000", 0.35)));
+        introductionPane.setVisible(false);
+        introductionPane.setOpacity(0);
+        introductionPane.setTranslateY(30);
+        introductionPane.setScaleX(0.9);
+        introductionPane.setScaleY(0.9);
+
+        // Nút X đóng
+        Button closeGuide = new Button("✖");
+        closeGuide.getStyleClass().add("close-button");
+
+        HBox topBar = new HBox(closeGuide);
+        topBar.setAlignment(Pos.TOP_RIGHT);
+        topBar.setPadding(new Insets(5, 10, 0, 0));
+
+        introductionPane.getChildren().addAll(topBar, heading, bodyLabel);
+
+        // Khi bấm “Đóng”
+        closeGuide.setOnAction(e -> {
+            // --- Trượt xuống ---
+            TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), introductionPane);
+            slideOut.setFromY(0);
+            slideOut.setToY(30);
+
+            // --- Mờ dần ---
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(300), introductionPane);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+
+            // --- Thu nhỏ nhẹ ---
+            javafx.animation.ScaleTransition scaleOut = new javafx.animation.ScaleTransition(Duration.millis(300), introductionPane);
+            scaleOut.setFromX(1.0);
+            scaleOut.setFromY(1.0);
+            scaleOut.setToX(0.9);
+            scaleOut.setToY(0.9);
+
+            // --- Gộp 3 hiệu ứng ---
+            javafx.animation.ParallelTransition hide = new javafx.animation.ParallelTransition(slideOut, fadeOut, scaleOut);
+            hide.setOnFinished(ev -> {
+                overlay.setVisible(false);
+                introductionPane.setVisible(false);
+            });
+            hide.play();
+
+            FadeTransition fadeBgBack = new FadeTransition(Duration.millis(300), content);
+            fadeBgBack.setFromValue(0.4);
+            fadeBgBack.setToValue(1);
+            fadeBgBack.play();
+        });
+
+        return introductionPane;
+    }
+
     private VBox createHighScorePane(StackPane overlay, HBox content) {
         //Heading
         Label heading = new Label("\uD83C\uDFC6 HIGH SCORES");
@@ -283,12 +289,6 @@ public class MainMenuScreen extends Application {
         topBar.setAlignment(Pos.TOP_RIGHT);
         topBar.setPadding(new Insets(5, 10, 0, 0));
 
-        //Get data highscores
-//        GridPane scoreGrid = new GridPane();
-//        scoreGrid.setHgap(40);  // khoảng cách ngang giữa các cột
-//        scoreGrid.setVgap(10);  // khoảng cách dọc giữa các hàng
-//        scoreGrid.setAlignment(Pos.CENTER);
-
         // Lấy danh sách điểm cho từng mức
         List<Integer> easyScores = MainMenuScreen.highScoreManager.getHighScoresEasy();
         List<Integer> mediumScores = MainMenuScreen.highScoreManager.getHighScoresMedium();
@@ -298,43 +298,8 @@ public class MainMenuScreen extends Application {
         VBox mediumColumn = createScoreColumn("MEDIUM", mediumScores, "#ffe66d");
         VBox hardColumn = createScoreColumn("HARD", hardScores, "#ff6b6b");
 
-//        Label easyTitle = new Label("EASY" );
-//        Label mediumTitle = new Label("MEDIUM");
-//        Label hardTitle = new Label("HARD");
-
-//        for (Label label : new Label[]{easyTitle, mediumTitle, hardTitle}) {
-//            label.setFont(Font.font("Consolas", FontWeight.BOLD, 17));
-//            label.setTextFill(Color.web("#b7e4c7"));
-//        }
-
         HBox scoreGrid = new HBox(40, easyColumn, mediumColumn, hardColumn);
         scoreGrid.setAlignment(Pos.CENTER);
-
-//        scoreGrid.add(easyTitle, 0, 0);
-//        scoreGrid.add(mediumTitle, 1, 0);
-//        scoreGrid.add(hardTitle, 2, 0);
-//
-//        // Thêm các dòng điểm
-//        for (int i = 0; i < maxRows; i++) {
-//            if (i < easyScores.size()) {
-//                Label score = new Label("• " + easyScores.get(i));
-//                score.setFont(Font.font("Consolas", 14));
-//                score.setTextFill(Color.web("#e9f5ec"));
-//                scoreGrid.add(score, 0, i + 1);
-//            }
-//            if (i < mediumScores.size()) {
-//                Label score = new Label("• " + mediumScores.get(i));
-//                score.setFont(Font.font("Consolas", 14));
-//                score.setTextFill(Color.web("#e9f5ec"));
-//                scoreGrid.add(score, 1, i + 1);
-//            }
-//            if (i < hardScores.size()) {
-//                Label score = new Label("• " + hardScores.get(i));
-//                score.setFont(Font.font("Consolas", 14));
-//                score.setTextFill(Color.web("#e9f5ec"));
-//                scoreGrid.add(score, 2, i + 1);
-//            }
-//        }
 
         // --- Bảng hiển thị ---
         VBox pane = new VBox(12);
@@ -394,7 +359,7 @@ public class MainMenuScreen extends Application {
         column.setAlignment(Pos.TOP_CENTER);
         column.getChildren().add(titleLabel);
 
-        for (int i = 0; i < scores.size(); i++) {
+        for (int i = 0; i < HighScoreManager.numScores; i++) {
             Label scoreLabel = new Label(String.format("%2d. %d", i + 1, scores.get(i)));
             scoreLabel.setFont(Font.font("Consolas", 14));
             scoreLabel.setTextFill(Color.web("#e9f5ec"));

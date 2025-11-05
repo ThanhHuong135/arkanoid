@@ -38,7 +38,12 @@ public class EndGameScreen {
         scoreText.setEffect(new javafx.scene.effect.DropShadow(15, Color.web("#00ffff")));
 
         overlay.visibleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal) scoreText.setText("Your Score: " + gameManager.getScore());
+            if (newVal) {
+                scoreText.setText("Your Score: " + gameManager.getScore());
+                 MainMenuScreen.highScoreManager.addScore(gameManager.getScore(), MainMenuScreen.highScoreManager.getChosenDifficulty());
+                // System.out.println(MainMenuScreen.highScoreManager.getChosenDifficulty());
+                // MainMenuScreen.highScoreManager.writeToFile();
+            }
         });
 
         // === Nút bấm ===
@@ -63,7 +68,10 @@ public class EndGameScreen {
             }
         });
 
-        btnExit.setOnAction(e -> stage.close());
+        btnExit.setOnAction(e -> {
+            MainMenuScreen.highScoreManager.writeToFile();
+            stage.close();
+        });
 
         overlay.getChildren().addAll(title, scoreText, btnRestart, btnMainMenu, btnExit);
         return overlay;
