@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import object.Ball;
 import object.Paddle;
+import org.example.Main;
 
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
@@ -79,6 +80,7 @@ public class LevelScreen {
         btnEasy.setOnAction(e -> {
             try  {
                 levelPath.set("level_1.csv");
+                MainMenuScreen.highScoreManager.setChosenDifficulty(1);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -87,6 +89,7 @@ public class LevelScreen {
         btnNormal.setOnAction(e -> {
             try {
                 levelPath.set("level_2.csv");
+                MainMenuScreen.highScoreManager.setChosenDifficulty(2);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -95,6 +98,7 @@ public class LevelScreen {
         btnHard.setOnAction(e -> {
             try {
                 levelPath.set("level_3.csv");
+                MainMenuScreen.highScoreManager.setChosenDifficulty(3);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

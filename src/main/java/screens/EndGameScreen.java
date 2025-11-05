@@ -41,7 +41,7 @@ public class EndGameScreen {
             if (newVal) {
                 scoreText.setText("Your Score: " + gameManager.getScore());
                  MainMenuScreen.highScoreManager.addScore(gameManager.getScore(), MainMenuScreen.highScoreManager.getChosenDifficulty());
-                // System.out.println(MainMenuScreen.highScoreManager.getChosenDifficulty());
+                 System.out.println(MainMenuScreen.highScoreManager.getChosenDifficulty());
                 // MainMenuScreen.highScoreManager.writeToFile();
             }
         });
