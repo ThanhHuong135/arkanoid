@@ -22,6 +22,8 @@ import javafx.util.Duration;
 import object.Ball;
 import object.Paddle;
 import java.net.URL;
+import java.util.List;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -44,6 +46,7 @@ public class MainMenuScreen extends Application {
         mediaView.setFitWidth(800);
         mediaView.setFitHeight(500);
         mediaView.setPreserveRatio(false);
+
         // LEFT: Game Demo
         VBox leftPane = new VBox();
         leftPane.setSpacing(20);
@@ -91,9 +94,110 @@ public class MainMenuScreen extends Application {
         Button btnSettings = createMenuButton("⚙ SETTING", "settings-btn");
         Button btnRanking = createMenuButton("🏆 RANKING", "ranking-btn");
         Button btnGuide = createMenuButton("📖 GUIDE", "guide-btn");
+        Button btnExit = createMenuButton("❌ EXIT   ", "exit-btn");
+        btnExit.setOnAction(e -> {
+            highScoreManager.writeToFile();
+            System.exit(0);
+        });
 
-        //Create Introduction
+        StackPane overlay = new StackPane();
+        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.6);"); // làm tối nền
+        overlay.setVisible(false); // ẩn ban đầu
 
+        //Create Ranking
+        VBox highScorePane = createHighScorePane(overlay, content);
+        VBox introductionPane = createIntroductionPane(overlay, content);
+        overlay.getChildren().addAll(introductionPane, highScorePane);
+
+        // Khi bấm “Hướng dẫn”
+        btnGuide.setOnAction(e -> {
+            overlay.setVisible(true);
+            introductionPane.setVisible(true);
+
+            // --- Hiệu ứng trượt lên ---
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(400), introductionPane);
+            slideIn.setFromY(30);
+            slideIn.setToY(0);
+
+            // --- Hiệu ứng mờ dần ---
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(400), introductionPane);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
+            // --- Hiệu ứng phóng to ---
+            javafx.animation.ScaleTransition scaleIn = new javafx.animation.ScaleTransition(Duration.millis(400), introductionPane);
+            scaleIn.setFromX(0.9);
+            scaleIn.setFromY(0.9);
+            scaleIn.setToX(1.0);
+            scaleIn.setToY(1.0);
+
+            // --- Chạy đồng thời cả 3 ---
+            javafx.animation.ParallelTransition show = new javafx.animation.ParallelTransition(slideIn, fadeIn, scaleIn);
+            show.play();
+
+            FadeTransition fadeBg = new FadeTransition(Duration.millis(400), content);
+            fadeBg.setFromValue(1);
+            fadeBg.setToValue(0.4);
+            fadeBg.play();
+        });
+
+        btnRanking.setOnAction(e -> {
+            overlay.setVisible(true);
+            VBox pane = highScorePane;
+            pane.setVisible(true);
+
+            TranslateTransition slideIn = new TranslateTransition(Duration.millis(400), pane);
+            slideIn.setFromY(30);
+            slideIn.setToY(0);
+
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(400), pane);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
+            javafx.animation.ScaleTransition scaleIn = new javafx.animation.ScaleTransition(Duration.millis(400), pane);
+            scaleIn.setFromX(0.9);
+            scaleIn.setFromY(0.9);
+            scaleIn.setToX(1.0);
+            scaleIn.setToY(1.0);
+
+            javafx.animation.ParallelTransition show = new javafx.animation.ParallelTransition(slideIn, fadeIn, scaleIn);
+            show.play();
+
+            FadeTransition fadeBg = new FadeTransition(Duration.millis(400), content);
+            fadeBg.setFromValue(1);
+            fadeBg.setToValue(0.4);
+            fadeBg.play();
+        });
+
+        rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
+
+        // MAIN LAYOUT
+        StackPane root = new StackPane(mediaView, content, overlay);
+
+        // Tạo SettingScreen
+        SettingScreen settingScreen = new SettingScreen(content);
+        // Thêm cả VBox menu và SettingScreen vào StackPane
+        root.getChildren().add(settingScreen);
+        // Nút Settings chỉ cần gọi show
+        btnSettings.setOnAction(e -> settingScreen.show(content));
+
+        Scene scene = new Scene(root, 800, 500);
+        scene.getStylesheets().add(
+                MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
+        );
+        stage.setScene(scene);
+        stage.setTitle("Arkanoid");
+        stage.show();
+    }
+
+    private Button createMenuButton(String text, String id) {
+        Button button = new Button(text);
+        button.getStyleClass().add("menu-button");
+        button.setId(id);
+        return button;
+    }
+
+    private VBox createIntroductionPane(StackPane overlay, HBox content) {
         //Heading
         Label heading = new Label("How to play");
         heading.setTextFill(Color.web("#b7e4c7"));
@@ -133,42 +237,6 @@ public class MainMenuScreen extends Application {
         topBar.setPadding(new Insets(5, 10, 0, 0));
 
         introductionPane.getChildren().addAll(topBar, heading, bodyLabel);
-        StackPane overlay = new StackPane();
-        overlay.setStyle("-fx-background-color: rgba(0,0,0,0.6);"); // làm tối nền
-        overlay.setVisible(false); // ẩn ban đầu
-        overlay.getChildren().add(introductionPane);
-
-        // Khi bấm “Hướng dẫn”
-        btnGuide.setOnAction(e -> {
-            overlay.setVisible(true);
-            introductionPane.setVisible(true);
-
-            // --- Hiệu ứng trượt lên ---
-            TranslateTransition slideIn = new TranslateTransition(Duration.millis(400), introductionPane);
-            slideIn.setFromY(30);
-            slideIn.setToY(0);
-
-            // --- Hiệu ứng mờ dần ---
-            FadeTransition fadeIn = new FadeTransition(Duration.millis(400), introductionPane);
-            fadeIn.setFromValue(0);
-            fadeIn.setToValue(1);
-
-            // --- Hiệu ứng phóng to ---
-            javafx.animation.ScaleTransition scaleIn = new javafx.animation.ScaleTransition(Duration.millis(400), introductionPane);
-            scaleIn.setFromX(0.9);
-            scaleIn.setFromY(0.9);
-            scaleIn.setToX(1.0);
-            scaleIn.setToY(1.0);
-
-            // --- Chạy đồng thời cả 3 ---
-            javafx.animation.ParallelTransition show = new javafx.animation.ParallelTransition(slideIn, fadeIn, scaleIn);
-            show.play();
-
-            FadeTransition fadeBg = new FadeTransition(Duration.millis(400), content);
-            fadeBg.setFromValue(1);
-            fadeBg.setToValue(0.4);
-            fadeBg.play();
-        });
 
         // Khi bấm “Đóng”
         closeGuide.setOnAction(e -> {
@@ -203,28 +271,102 @@ public class MainMenuScreen extends Application {
             fadeBgBack.play();
         });
 
-        Button btnExit = createMenuButton("❌ EXIT   ", "exit-btn");
-        btnExit.setOnAction(e -> System.exit(0));
-
-        rightPane.getChildren().addAll(title, btnStart, btnSettings, btnRanking, btnGuide, btnExit);
-        // MAIN LAYOUT
-        //content.getStyleClass().add("root");
-        StackPane root = new StackPane(mediaView, content, overlay);
-
-        Scene scene = new Scene(root, 800, 500);
-        scene.getStylesheets().add(
-                MainMenuScreen.class.getResource("/assets/style.css").toExternalForm()
-        );
-        stage.setScene(scene);
-        stage.setTitle("Arkanoid");
-        stage.show();
+        return introductionPane;
     }
 
-    private Button createMenuButton(String text, String id) {
-        Button button = new Button(text);
-        button.getStyleClass().add("menu-button");
-        button.setId(id);
-        return button;
+    private VBox createHighScorePane(StackPane overlay, HBox content) {
+        //Heading
+        Label heading = new Label("\uD83C\uDFC6 HIGH SCORES");
+        heading.setTextFill(Color.web("#b7e4c7"));
+        heading.setFont(Font.font("Consolas", FontWeight.BOLD, 20));
+        heading.setEffect(new DropShadow(12, Color.web("#52b788", 0.35)));
+
+        //CloseButton
+        Button closeBtn = new Button("✖");
+        closeBtn.getStyleClass().add("close-button");
+
+        HBox topBar = new HBox(closeBtn);
+        topBar.setAlignment(Pos.TOP_RIGHT);
+        topBar.setPadding(new Insets(5, 10, 0, 0));
+
+        // Lấy danh sách điểm cho từng mức
+        List<Integer> easyScores = MainMenuScreen.highScoreManager.getHighScoresEasy();
+        List<Integer> mediumScores = MainMenuScreen.highScoreManager.getHighScoresMedium();
+        List<Integer> hardScores = MainMenuScreen.highScoreManager.getHighScoresHard();
+
+        VBox easyColumn = createScoreColumn("EASY", easyScores, "#b7e4c7");
+        VBox mediumColumn = createScoreColumn("MEDIUM", mediumScores, "#ffe66d");
+        VBox hardColumn = createScoreColumn("HARD", hardScores, "#ff6b6b");
+
+        HBox scoreGrid = new HBox(40, easyColumn, mediumColumn, hardColumn);
+        scoreGrid.setAlignment(Pos.CENTER);
+
+        // --- Bảng hiển thị ---
+        VBox pane = new VBox(12);
+        pane.setAlignment(Pos.CENTER);
+        pane.setPadding(new Insets(20, 16, 24, 16));
+        pane.setMaxWidth(360);
+        pane.setMaxHeight(300);
+        pane.setBackground(new Background(new BackgroundFill(Color.web("#ffffff", 0.06), new CornerRadii(12), Insets.EMPTY)));
+        pane.setBorder(new Border(new BorderStroke(Color.web("#95d5b2", 0.35), BorderStrokeStyle.SOLID, new CornerRadii(12), new BorderWidths(1))));
+        pane.setEffect(new DropShadow(20, Color.web("#000000", 0.35)));
+        pane.setVisible(false);
+        pane.setOpacity(0);
+        pane.setTranslateY(30);
+        pane.setScaleX(0.9);
+        pane.setScaleY(0.9);
+
+        pane.getChildren().addAll(topBar, heading, scoreGrid);
+
+        // --- Nút đóng ---
+        closeBtn.setOnAction(e -> {
+            TranslateTransition slideOut = new TranslateTransition(Duration.millis(300), pane);
+            slideOut.setFromY(0);
+            slideOut.setToY(30);
+
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(300), pane);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+
+            javafx.animation.ScaleTransition scaleOut = new javafx.animation.ScaleTransition(Duration.millis(300), pane);
+            scaleOut.setFromX(1.0);
+            scaleOut.setFromY(1.0);
+            scaleOut.setToX(0.9);
+            scaleOut.setToY(0.9);
+
+            javafx.animation.ParallelTransition hide = new javafx.animation.ParallelTransition(slideOut, fadeOut, scaleOut);
+            hide.setOnFinished(ev -> {
+                overlay.setVisible(false);
+                pane.setVisible(false);
+            });
+            hide.play();
+
+            FadeTransition fadeBgBack = new FadeTransition(Duration.millis(300), content);
+            fadeBgBack.setFromValue(0.4);
+            fadeBgBack.setToValue(1);
+            fadeBgBack.play();
+        });
+
+        return pane;
+    }
+
+    private VBox createScoreColumn(String title, List<Integer> scores, String colorHex) {
+        Label titleLabel = new Label(title);
+        titleLabel.setFont(Font.font("Consolas", FontWeight.BOLD, 16));
+        titleLabel.setTextFill(Color.web(colorHex));
+
+        VBox column = new VBox(6);
+        column.setAlignment(Pos.TOP_CENTER);
+        column.getChildren().add(titleLabel);
+
+        for (int i = 0; i < HighScoreManager.numScores; i++) {
+            Label scoreLabel = new Label(String.format("%2d. %d", i + 1, scores.get(i)));
+            scoreLabel.setFont(Font.font("Consolas", 14));
+            scoreLabel.setTextFill(Color.web("#e9f5ec"));
+            column.getChildren().add(scoreLabel);
+        }
+
+        return column;
     }
 
     private void drawDemo(GraphicsContext gc) {

@@ -17,6 +17,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import object.Ball;
 import object.Paddle;
+import org.example.Main;
 
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicReference;
@@ -76,25 +77,46 @@ public class LevelScreen {
         });
 
         Button btnEasy = createMenuButton("EASY", "easy-btn");
+        Button btnNormal = createMenuButton("NORMAL", "normal-btn");
+        Button btnHard = createMenuButton("HARD", "hard-btn");
+
+        Runnable resetSelection = () -> {
+            btnEasy.getStyleClass().remove("selected-button");
+            btnNormal.getStyleClass().remove("selected-button");
+            btnHard.getStyleClass().remove("selected-button");
+        };
+
         btnEasy.setOnAction(e -> {
             try  {
                 levelPath.set("level_1.csv");
+                MainMenuScreen.highScoreManager.setChosenDifficulty(1);
+
+                resetSelection.run();
+                btnEasy.getStyleClass().add("selected-button"); // đánh dấu nút này
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
-        Button btnNormal = createMenuButton("NORMAL", "normal-btn");
+
         btnNormal.setOnAction(e -> {
             try {
                 levelPath.set("level_2.csv");
+                MainMenuScreen.highScoreManager.setChosenDifficulty(2);
+
+                resetSelection.run();
+                btnNormal.getStyleClass().add("selected-button");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });
-        Button btnHard = createMenuButton("HARD", "hard-btn");
+
         btnHard.setOnAction(e -> {
             try {
                 levelPath.set("level_3.csv");
+                MainMenuScreen.highScoreManager.setChosenDifficulty(3);
+
+                resetSelection.run();
+                btnHard.getStyleClass().add("selected-button");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
