@@ -27,6 +27,7 @@ public class SettingScreen extends StackPane {
         settingBox.setAlignment(Pos.CENTER);
         settingBox.setPadding(new Insets(20, 16, 24, 16));
         settingBox.setMaxWidth(320);
+        settingBox.setMaxHeight(260);
         settingBox.setBackground(new Background(new BackgroundFill(
                 Color.web("#ffffff", 0.07), new CornerRadii(12), Insets.EMPTY)));
         settingBox.setBorder(new Border(new BorderStroke(
